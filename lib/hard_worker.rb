@@ -2,13 +2,23 @@
 
 require_relative "hard_worker/version"
 require_relative "hard_worker/worker"
+require 'byebug'
 
-module HardWorker
-  extend self
-  class Error < StandardError; end
-  @@job_queu = []
+class HardWorker
+  @worker_list
 
-  def job_queue
-    @@job_queu
+  def initialize(workers: 1)
+    @worker_list = []
+    workers.times do |i|
+      @worker_list << Thread.new { Worker.new }
+    end
   end
+
+  def stop_workers
+    @worker_list.each do |worker|
+      Thread.kill(worker)
+    end
+  end
+
+  class Error < StandardError; end
 end
