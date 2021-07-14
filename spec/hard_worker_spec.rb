@@ -12,17 +12,17 @@ RSpec.describe HardWorker do
     end
 
     it "the worker class has a method that returns all jobs" do
-      expect(HardWorker::Queue.job_list).to be_empty
+      expect(HardWorker.job_list).to be_empty
     end
   end
 
   describe "job processing" do
     it "allows you to run code in the background" do
-      HardWorker::Queue.job_list << proc { puts 'hello' }
-      expect(HardWorker::Queue.job_list.length).to eq 1
+      HardWorker.job_list << proc { puts 'hello' }
+      expect(HardWorker.job_list.length).to eq 1
       worker = HardWorker.new
       sleep(1)
-      expect(HardWorker::Queue.job_list.length).to eq 0
+      expect(HardWorker.job_list.empty?).to be_truthy
       worker.stop_workers
     end
   end

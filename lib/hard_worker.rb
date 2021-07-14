@@ -3,9 +3,11 @@
 require_relative "hard_worker/version"
 require_relative "hard_worker/worker"
 require 'byebug'
+require 'thread'
 
 class HardWorker
   @worker_list
+  @queue = Queue.new
 
   def initialize(workers: 1)
     @worker_list = []
@@ -18,6 +20,14 @@ class HardWorker
     @worker_list.each do |worker|
       Thread.kill(worker)
     end
+  end
+
+  def self.job_list
+    @queue
+  end
+
+  def self.fetch_job
+    @queue.pop
   end
 
   class Error < StandardError; end
