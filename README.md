@@ -1,8 +1,16 @@
 # Hardworker
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hardworker`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is HardWorker, a new Ruby backend job library! It supports running procs in the background. 
+However, it does not yet support classes. So only procs. Also, you lose all jobs if you restart the process. 
 
-TODO: Delete this and the text above, and describe your gem
+But it uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries. 
+
+TODO LIST: 
+- Marshal the job queue into a file so you don't lose all progress
+- Support Rails and ActiveJob
+- Have a web UI
+- Do some performance testing
+- Add a section telling people to use Sidekiq if they can
 
 ## Installation
 
@@ -22,7 +30,27 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Start up HardWorker! 
+
+    $ hardworker
+
+Then, in another program, connect to HardWorker and give it a job to do. 
+Sample below:
+
+```ruby
+class DummyWorker
+  attr_accessor :queue
+
+  def initialize
+    server_uri = HardWorker::URI
+    self.queue = DRbObject.new_with_uri(server_uri)
+  end
+end
+
+dummy = DummyWorker.new
+dummy.queue.push(proc { 2 / 1 })
+```
+
 
 ## Development
 
