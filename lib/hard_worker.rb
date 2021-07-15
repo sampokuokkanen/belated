@@ -2,7 +2,6 @@
 
 require_relative 'hard_worker/version'
 require_relative 'hard_worker/worker'
-require 'byebug'
 require 'drb'
 
 # HardWorker is a pure Ruby job backend.

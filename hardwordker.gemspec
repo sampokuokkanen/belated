@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Just another Ruby background job library.'
   spec.description   = %(
-    A very, very simple Ruby background job library, that does not have many features, and does not even work yet.
+    A very, very simple Ruby background job library, that does not have many features, and almost works.
   ).gsub(/\s+/, ' ').strip
   spec.homepage      = 'https://github.com/sampokuokkanen/hard_worker'
   spec.license       = 'MIT'
