@@ -16,13 +16,7 @@ class HardWorker
   @@queue = Queue.new
 
   def initialize(workers: 1, connect: false)
-    begin
-      jobs = YAML.load(File.binread(FILE_NAME))
-      jobs.each do |job|
-        @@queue.push(job)
-      end
-    rescue
-    end
+    load_jobs
     @worker_list = []
     workers.times do |_i|
       @worker_list << Thread.new { Worker.new }
@@ -34,13 +28,22 @@ class HardWorker
     DRb.thread.join
   end
 
+  def load_jobs
+    jobs = YAML.safe_load(File.binread(FILE_NAME))
+    jobs.each do |job|
+      @@queue.push(job)
+    end
+  rescue StandardError
+    # do nothing
+  end
+
   def stop_workers
     @worker_list.each do |worker|
       Thread.kill(worker)
     end
     class_array = []
     @@queue.size.times do |_i|
-      next if (klass_or_proc = @@queue.pop).class == Proc
+      next if (klass_or_proc = @@queue.pop).instance_of?(Proc)
 
       class_array << klass_or_proc
     end

@@ -11,13 +11,16 @@ class HardWorker
         job = HardWorker.fetch_job
         next unless job
 
-        if job.class == Proc
-          pp job.call
-        else
-          pp job.inspect
-          pp job&.perform
-        end
+        call_job(job)
         puts 'fetching jobs...'
+      end
+    end
+
+    def call_job(job)
+      if job.instance_of?(Proc)
+        pp job.call
+      else
+        pp job&.perform
       end
     end
   end
