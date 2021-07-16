@@ -8,7 +8,15 @@ class HardWorker
 
     def start_working
       loop do
-        pp HardWorker.fetch_job.call
+        job = HardWorker.fetch_job
+        next unless job
+
+        if job.class == Proc
+          pp job.call
+        else
+          pp job.inspect
+          pp job&.perform
+        end
         puts 'fetching jobs...'
       end
     end
