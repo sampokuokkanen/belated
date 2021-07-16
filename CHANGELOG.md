@@ -10,6 +10,7 @@ Things are almost working. You can enqueue jobs! That should be more than enough
 
 - Bugfix: was requiring byebug. 
 
-## [0.0.2] - 2021-07-16
+## [0.0.3] - 2021-07-16
 
-- Bugfix: was requiring byebug. 
+- YAML Marshalled queue! So now the queue stays in memory even if restarted. Though kill and term signals still need catching.. that is not done yet. 
+- Also, now you can use classes! As long as the class has a perform-method. 
