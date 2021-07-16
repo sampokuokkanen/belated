@@ -7,7 +7,7 @@ RSpec.describe HardWorker do
 
   it 'remembers the jobs it has enqued even if restarted' do
     worker = HardWorker.new(workers: 0)
-    10.times do
+    5.times do
       worker.job_list.push(DumDum.new)
     end
     worker.stop_workers
@@ -15,6 +15,6 @@ RSpec.describe HardWorker do
     worker.reset_queue!
     second_worker = HardWorker.new(workers: 0)
     expect(second_worker.job_list.empty?).to be_falsey
-    expect(second_worker.job_list.length).to eq 10
+    expect(second_worker.job_list.length).to eq 5
   end
 end

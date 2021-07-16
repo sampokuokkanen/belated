@@ -29,7 +29,7 @@ class HardWorker
   end
 
   def load_jobs
-    jobs = YAML.safe_load(File.binread(FILE_NAME))
+    jobs = YAML.load(File.binread(FILE_NAME))
     jobs.each do |job|
       @@queue.push(job)
     end
@@ -51,7 +51,7 @@ class HardWorker
   end
 
   def reset_queue!
-    @@queue = []
+    @@queue = Queue.new
   end
 
   def job_list
