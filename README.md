@@ -47,6 +47,8 @@ class DummyWorker
   end
 end
 
+# Need to start dRuby on the client side
+DRb.start_service
 dummy = DummyWorker.new
 dummy.queue.push(proc { 2 / 1 })
 ```
