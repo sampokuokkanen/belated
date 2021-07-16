@@ -1,12 +1,13 @@
 # Hardworker
 
-This is HardWorker, a new Ruby backend job library! It supports running procs in the background. 
-However, it does not yet support classes. So only procs. Also, you lose all jobs if you restart the process. 
+This is HardWorker, a new Ruby backend job library! It supports running procs and classes in the background. 
+ ~~Also, you lose all jobs if you restart the process.~~ It now uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs. 
 
-But it uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries. 
+It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries. 
 
 TODO LIST: 
-- Marshal the job queue into a file so you don't lose all progress
+- ~~Marshal the job queue into a file so you don't lose all progress~~
+  (Ended up using YAML)
 - Support Rails and ActiveJob
 - Have a web UI
 - Do some performance testing
@@ -26,13 +27,13 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install hardworker
+    $ gem install hard_worker
 
 ## Usage
 
 Start up HardWorker! 
 
-    $ hardworker
+    $ hard_worker
 
 Then, in another program, connect to HardWorker and give it a job to do. 
 Sample below:
@@ -47,10 +48,18 @@ class DummyWorker
   end
 end
 
+class DumDum
+  # classes need to have a perform method
+  def perform
+    5 / 4
+  end
+end
+
 # Need to start dRuby on the client side
 DRb.start_service
 dummy = DummyWorker.new
 dummy.queue.push(proc { 2 / 1 })
+dummy.queue.push(DumDum.new)
 ```
 
 
@@ -62,7 +71,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hardworker. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/sampokuokkanen/hard_worker. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -70,4 +79,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Hardworker project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the HardWorker project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).

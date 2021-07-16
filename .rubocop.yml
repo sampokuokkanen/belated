@@ -21,3 +21,6 @@ Style/AsciiComments:
 
 Style/ClassVars:
   Enabled: false
+
+Security/YAMLLoad:
+  Enabled: false
