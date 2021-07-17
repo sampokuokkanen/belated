@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+$TESTING = true
 require 'hard_worker'
 
 RSpec.configure do |config|

@@ -4,6 +4,7 @@ require_relative 'hard_worker/version'
 require_relative 'hard_worker/worker'
 require 'drb'
 require 'yaml'
+require 'singleton'
 
 # HardWorker is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
@@ -11,7 +12,8 @@ require 'yaml'
 # need anything as big as Redis.
 # Loses all jobs if restarted.
 class HardWorker
-  URI = 'druby://localhost:8788'
+  include Singleton unless $TESTING
+  URI = 'druby://localhost:8787'
   FILE_NAME = 'hard_worker_dump'
   @@queue = Queue.new
 
