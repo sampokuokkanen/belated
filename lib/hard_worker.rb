@@ -51,7 +51,7 @@ class HardWorker
   end
 
   def reset_queue!
-    @@queue = Queue.new
+    @@queue.clear
   end
 
   def job_list
