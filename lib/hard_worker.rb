@@ -5,6 +5,7 @@ require_relative 'hard_worker/worker'
 require 'drb'
 require 'yaml'
 require 'singleton'
+require "hard_worker/rails" if defined?(::Rails::Engine)
 
 # HardWorker is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
