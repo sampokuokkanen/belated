@@ -4,7 +4,7 @@ RSpec.describe HardWorker do
   before do
     HardWorker.config.connect = false
   end
-  
+
   describe 'basics' do
     it 'should have a version number' do
       expect(HardWorker::VERSION).not_to be nil

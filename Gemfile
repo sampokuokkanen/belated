@@ -11,5 +11,5 @@ gem 'rspec', '~> 3.0'
 
 gem 'rubocop', '~> 1.7'
 
-gem "rails", ">= 6.1.3"
-gem "sqlite3"
+gem 'rails', '>= 6.1.3'
+gem 'sqlite3'

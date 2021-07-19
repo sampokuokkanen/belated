@@ -1,4 +1,3 @@
-
 class DummyWorker
   attr_accessor :queue
 
