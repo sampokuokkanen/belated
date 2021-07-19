@@ -8,5 +8,6 @@ RSpec.describe HardWorker do
     end
     sleep 0.2
     expect(worker.job_list.empty?).to be_truthy
+    worker.stop_workers
   end
 end

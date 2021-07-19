@@ -5,6 +5,7 @@ require_relative 'hard_worker/worker'
 require 'drb'
 require 'yaml'
 require 'singleton'
+require 'dry-configurable'
 require 'hard_worker/rails' if defined?(::Rails::Engine)
 
 # HardWorker is a pure Ruby job backend.
@@ -13,22 +14,42 @@ require 'hard_worker/rails' if defined?(::Rails::Engine)
 # need anything as big as Redis.
 # Loses all jobs if restarted.
 class HardWorker
+  extend Dry::Configurable
   include Singleton unless $TESTING
-  URI = 'druby://localhost:8787'
+  URI = 'druby://localhost:8788'
   FILE_NAME = 'hard_worker_dump'
   @@queue = Queue.new
 
-  def initialize(workers: 1, connect: false)
+  setting :rails, true
+  setting :rails_path, '.'
+  setting :workers, 1
+  setting :connect, false
+
+  def initialize
+    boot_app
     load_jobs
     @worker_list = []
-    workers.times do |_i|
+    HardWorker.config.workers.times do |_i|
       @worker_list << Thread.new { Worker.new }
     end
-    return unless connect
+    return unless HardWorker.config.connect
 
     DRb.start_service(URI, @@queue)
     puts "listening on #{URI}"
     DRb.thread.join
+  end
+
+  def boot_app
+    return unless rails?
+
+    ENV['RAILS_ENV'] ||= 'production'
+    require_relative "#{HardWorker.config.rails_path}/config/environment.rb"
+    require 'rails/all'
+    require 'hard_worker/rails'
+  end
+
+  def rails?
+    HardWorker.config.rails
   end
 
   def load_jobs
@@ -36,8 +57,13 @@ class HardWorker
     jobs.each do |job|
       @@queue.push(job)
     end
+    File.delete(HardWorker::FILE_NAME) if File.exist?(HardWorker::FILE_NAME)
   rescue StandardError
     # do nothing
+  end
+
+  def reload
+    load_jobs
   end
 
   def stop_workers
@@ -53,7 +79,7 @@ class HardWorker
     File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
   end
 
-  def reset_queue!
+  def self.clear_queue!
     @@queue.clear
   end
 
