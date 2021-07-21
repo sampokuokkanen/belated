@@ -28,5 +28,12 @@ Style/Documentation:
 Style/GlobalVars:
   Enabled: false
 
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Security/YAMLLoad:
   Enabled: false

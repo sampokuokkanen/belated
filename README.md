@@ -1,5 +1,7 @@
 # Hardworker
 
+[![CodeFactor](https://www.codefactor.io/repository/github/sampokuokkanen/hard_worker/badge)](https://www.codefactor.io/repository/github/sampokuokkanen/hard_worker) [![Gem Version](https://badge.fury.io/rb/hard_worker.svg)](https://badge.fury.io/rb/hard_worker)
+
 This is HardWorker, a new Ruby backend job library! It supports running procs and classes in the background. 
  ~~Also, you lose all jobs if you restart the process.~~ It now uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs. 
 
@@ -8,7 +10,9 @@ It uses dRuby to do the communication! Which is absolute great. No need for Redi
 TODO LIST: 
 - ~~Marshal the job queue into a file so you don't lose all progress~~
   (Ended up using YAML)
-- Support Rails and ActiveJob
+- ~~Support Rails~~ (Supported!)
+- Parse options from command line, eg. `--workers 10`
+- Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
 - Add a section telling people to use Sidekiq if they can
@@ -62,6 +66,38 @@ dummy.queue.push(proc { 2 / 1 })
 dummy.queue.push(DumDum.new)
 ```
 
+Hardworker runs on localhost, port 8788. Should probably make that a value you can change...
+
+## Rails
+
+Usage with Rails:
+First, start up HardWorker. 
+Then, 
+```ruby
+$client = HardWorker::Client.new
+```
+
+and you can use the client! 
+Call 
+
+```ruby
+$client.perform_belated(job)
+```
+If you want to pass a job to HardWorker. 
+
+# Settings
+Configuring HardWorker:
+
+```ruby
+HardWorker.configure do |config|
+  config.rails = false # default is true
+  config.rails_path = # './dummy' default is '.'
+  config.connect = false # Connect to dRuby, default is true, useful for testing only
+  config.workers = 2 # default is 1
+end
+```
+Remember to configure HardWorker before starting it. 
+Command line option parsing coming in a future version! 
 
 ## Development
 

@@ -1,29 +1,21 @@
 # frozen_string_literal: true
 
+require 'dummy_worker'
 require 'dumdum'
 
-class DummyWorker
-  attr_accessor :queue
-
-  def initialize
-    server_uri = HardWorker::URI
-    self.queue = DRbObject.new_with_uri(server_uri)
-  end
-end
-
 RSpec.describe HardWorker do
-  after(:all) do
-    worker = HardWorker.new
-    worker.reset_queue!
-  end
-
   describe 'job processing' do
     it 'allows you to run code in the background' do
-      Thread.new { HardWorker.new(connect: true) }
+      HardWorker.config.rails = false
+      HardWorker.config.connect = true
+      HardWorker.config.workers = 1
+      thread = Thread.new { HardWorker.new }
       dummy = DummyWorker.new
       dummy.queue.push(DumDum.new)
       sleep 0.05
       expect(dummy.queue.empty?).to be_truthy
+      HardWorker.stop_workers
+      thread.kill
     end
   end
 end
