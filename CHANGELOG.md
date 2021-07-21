@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+Rails support!
+Need a better way to find Rails config, going to release 0.1.0 after that. 
 ## [0.0.1] - 2021-07-15
 
 - Initial release! :tada:

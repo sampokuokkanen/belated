@@ -3,6 +3,7 @@
 RSpec.describe HardWorker do
   before do
     HardWorker.config.connect = false
+    HardWorker.config.rails = false
   end
 
   describe 'basics' do
@@ -23,6 +24,10 @@ RSpec.describe HardWorker do
 
   describe 'job processing' do
     it 'allows you to run code in the background' do
+      HardWorker.configure do |config|
+        config.rails = false
+      end
+
       worker = HardWorker.new
       worker.job_list.push(proc { puts 'hello' })
       expect(worker.job_list.length).to eq 1
