@@ -14,6 +14,7 @@ RSpec.describe HardWorker do
       dummy.queue.push(DumDum.new)
       sleep 0.05
       expect(dummy.queue.empty?).to be_truthy
+      HardWorker.stop_workers
       thread.kill
     end
   end

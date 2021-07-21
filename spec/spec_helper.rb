@@ -16,5 +16,7 @@ RSpec.configure do |config|
   end
   config.after(:each) do
     HardWorker.clear_queue!
+    DRb.stop_service
+    sleep 0.01
   end
 end

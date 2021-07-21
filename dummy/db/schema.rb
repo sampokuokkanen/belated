@@ -15,5 +15,6 @@ ActiveRecord::Schema.define(version: 20_210_613_015_406) do
     t.string 'name'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.index ['name'], name: 'index_users_on_name', unique: true
   end
 end

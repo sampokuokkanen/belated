@@ -26,7 +26,7 @@ RSpec.describe HardWorker do
       worker = HardWorker.new
       worker.job_list.push(proc { puts 'hello' })
       expect(worker.job_list.length).to eq 1
-      sleep(1)
+      sleep 0.01
       expect(worker.job_list.empty?).to be_truthy
       worker.stop_workers
     end

@@ -17,7 +17,7 @@ class HardWorker
     end
 
     def call_job(job)
-      if job.instance_of?(Proc)
+      if job.respond_to?(:call)
         pp job.call
       else
         pp job&.perform
