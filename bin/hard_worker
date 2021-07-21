@@ -10,4 +10,4 @@ require 'hard_worker'
 #   config.connect = false # Connect to dRuby, default is true, useful for testing only
 #   config.workers = 2 # default is 1
 # end
-HardWorker.new
+HardWorker.instance
