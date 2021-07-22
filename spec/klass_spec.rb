@@ -2,6 +2,9 @@ require 'dumdum'
 
 RSpec.describe HardWorker do
   it 'can enqueue classes too' do
+    HardWorker.configure do |config|
+      config.rails = false
+    end
     worker = HardWorker.new
     10.times do
       worker.job_list.push(DumDum.new)

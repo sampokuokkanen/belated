@@ -25,9 +25,9 @@ class HardWorker
   setting :rails, true
   setting :rails_path, '.'
   setting :workers, 1
-  setting :connect, false
+  setting :connect, true
 
-  def initialize
+  def start
     boot_app
     load_jobs
     @worker_list = []
@@ -40,12 +40,13 @@ class HardWorker
     puts "listening on #{URI}"
     DRb.thread.join
   end
-
+  alias initialize start
+ 
   def boot_app
     return unless rails?
 
     ENV['RAILS_ENV'] ||= 'production'
-    require_relative "#{HardWorker.config.rails_path}/config/environment.rb"
+    require File.expand_path("#{HardWorker.config.rails_path}/config/environment.rb")
     require 'rails/all'
     require 'hard_worker/rails'
   end

@@ -5,9 +5,10 @@ $TESTING = false
 $LOAD_PATH.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 require 'hard_worker'
 HardWorker.configure do |config|
-  # config.rails = false # default is true
+  #config.rails = false # default is true
   config.rails_path = ARGV.shift
   # config.connect = false # Connect to dRuby, default is true, useful for testing only
   # config.workers = 2 # default is 1
 end
-HardWorker.instance
+instance = HardWorker.instance
+instance.start
