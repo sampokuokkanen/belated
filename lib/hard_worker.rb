@@ -26,6 +26,7 @@ class HardWorker
   setting :rails_path, '.'
   setting :workers, 1
   setting :connect, true
+  setting :environment, 'development'
 
   def start
     boot_app
@@ -45,7 +46,7 @@ class HardWorker
   def boot_app
     return unless rails?
 
-    ENV['RAILS_ENV'] ||= 'production'
+    ENV['RAILS_ENV'] ||=  HardWorker.config.environment
     require File.expand_path("#{HardWorker.config.rails_path}/config/environment.rb")
     require 'rails/all'
     require 'hard_worker/rails'
