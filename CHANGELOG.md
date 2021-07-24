@@ -1,10 +1,4 @@
 ## [Unreleased]
-
-Rails support!
-Need a better way to find Rails config, going to release 0.1.0 after that.
-Going to change the name of the gem to something a bit more original than Belated.
-(Belated is already in use in Sidekiq documentation)
-
 ## [0.0.1] - 2021-07-15
 
 - Initial release! :tada:
@@ -25,3 +19,7 @@ Going to change the name of the gem to something a bit more original than Belate
 - Rails support!
 - Banner (for Belated though...)
 - Final release, as the name of this gem is going to change to Belated.
+
+## [0.1.0] - 2021-07-24
+
+- Gem name changed to Belated!
