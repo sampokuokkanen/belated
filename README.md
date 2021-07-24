@@ -14,6 +14,8 @@ TODO LIST:
   (Ended up using YAML)
 - ~~Support Rails~~ (Supported!)
 - ~~Parse options from command line, eg. `--workers 10`~~(Done!)
+- Don't crash on errors
+- Make it possible to schedule jobs
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
@@ -77,14 +79,14 @@ First, start up Belated.
 Then,
 
 ```ruby
-$client = Belated::Client.new
+client = Belated::Client.new
 ```
 
 and you can use the client!
 Call
 
 ```ruby
-$client.perform_belated(job)
+client.perform_belated(job)
 ```
 
 If you want to pass a job to Belated.
