@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hard_worker (0.0.4)
+    hard_worker (0.0.5)
       drb
       dry-configurable
 
