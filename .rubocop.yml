@@ -35,5 +35,8 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
 
+Metrics/ClassLength:
+  Max: 200
+
 Security/YAMLLoad:
   Enabled: false
