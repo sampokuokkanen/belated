@@ -38,15 +38,15 @@ class HardWorker
     return unless HardWorker.config.connect
 
     DRb.start_service(URI, @@queue, verbose: true)
-    puts "listening on #{URI}"
+    puts banner_and_info
     DRb.thread.join
   end
   alias initialize start
- 
+
   def boot_app
     return unless rails?
 
-    ENV['RAILS_ENV'] ||=  HardWorker.config.environment
+    ENV['RAILS_ENV'] ||= HardWorker.config.environment
     require File.expand_path("#{HardWorker.config.rails_path}/config/environment.rb")
     require 'rails/all'
     require 'hard_worker/rails'
@@ -94,6 +94,38 @@ class HardWorker
       class_array << klass_or_proc
     end
     File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
+  end
+
+  # rubocop:disable Layout/LineLength
+  # rubocop:disable Metrics/MethodLength
+  def banner
+    <<-'BANNER'
+    .----------------. .----------------. .----------------. .----------------. .----------------. .----------------. .----------------. 
+    | .--------------. | .--------------. | .--------------. | .--------------. | .--------------. | .--------------. | .--------------. |
+    | |   ______     | | |  _________   | | |   _____      | | |      __      | | |  _________   | | |  _________   | | |  ________    | |
+    | |  |_   _ \    | | | |_   ___  |  | | |  |_   _|     | | |     /  \     | | | |  _   _  |  | | | |_   ___  |  | | | |_   ___ `.  | |
+    | |    | |_) |   | | |   | |_  \_|  | | |    | |       | | |    / /\ \    | | | |_/ | | \_|  | | |   | |_  \_|  | | |   | |   `. \ | |
+    | |    |  __'.   | | |   |  _|  _   | | |    | |   _   | | |   / ____ \   | | |     | |      | | |   |  _|  _   | | |   | |    | | | |
+    | |   _| |__) |  | | |  _| |___/ |  | | |   _| |__/ |  | | | _/ /    \ \_ | | |    _| |_     | | |  _| |___/ |  | | |  _| |___.' / | |
+    | |  |_______/   | | | |_________|  | | |  |________|  | | ||____|  |____|| | |   |_____|    | | | |_________|  | | | |________.'  | |
+    | |              | | |              | | |              | | |              | | |              | | |              | | |              | |
+    | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' | '--------------' |
+     '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' '----------------' 
+    BANNER
+  end
+
+  def banner_and_info
+    puts banner
+    puts 'HardWorker is going to change to Belated!'
+    puts "Currently running HardWorker version #{HardWorker::VERSION}"
+    puts %(HardWorker running #{@worker_list&.length.to_i} workers on #{URI}...)
+  end
+
+  def stats
+    {
+      jobs: @@queue.size,
+      workers: @worker_list&.length
+    }
   end
 
   def self.clear_queue!

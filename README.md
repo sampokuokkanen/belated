@@ -11,7 +11,7 @@ TODO LIST:
 - ~~Marshal the job queue into a file so you don't lose all progress~~
   (Ended up using YAML)
 - ~~Support Rails~~ (Supported!)
-- Parse options from command line, eg. `--workers 10`
+- ~~Parse options from command line, eg. `--workers 10`~~(Done!)
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
@@ -96,9 +96,20 @@ HardWorker.configure do |config|
   config.workers = 2 # default is 1
 end
 ```
-Remember to configure HardWorker before starting it. 
-Command line option parsing coming in a future version! 
 
+From command line:
+
+$ bundle exec hard_worker --rails=true
+
+Use Rails or not. 
+
+$ bundle exec hard_worker --rails_path=/my_rails_project
+
+Path to Rails project. 
+
+$ bundle exec hard_worker --workers=10
+
+Number of workers. 
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

@@ -4,11 +4,35 @@
 $TESTING = false
 $LOAD_PATH.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 require 'hard_worker'
-HardWorker.configure do |config|
-  #config.rails = false # default is true
-  config.rails_path = ARGV.shift
-  # config.connect = false # Connect to dRuby, default is true, useful for testing only
-  # config.workers = 2 # default is 1
-end
+require 'optparse'
+require 'byebug'
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: hard_worker [options]'
+
+  opts.separator ''
+  opts.separator 'Options:'
+
+  opts.on('-r=RAILS', '--rails=RAILS', 'Load Rails or not, default true') do |rails|
+    HardWorker.config.rails = rails == 'true'
+  end
+
+  opts.on('-r_path=PATH', '--rails_path=PATH', 'Path to Rails') do |path|
+    HardWorker.config.rails_path = path
+  end
+
+  opts.on('-w=WORKERS', '--workers=WORKERS', 'Number of workers, default 1') do |workers|
+    HardWorker.config.workers = workers.to_i
+  end
+
+  opts.on('-e=ENV', '--env=ENV', 'Environment, default development') do |env|
+    HardWorker.config.env = env
+  end
+
+  opts.on('-c=CONNECT', '--connect=CONNECT', 'Start dRuby connection, default true') do |connect|
+    HardWorker.config.connect = connect == 'true'
+  end
+end.parse!
+
 instance = HardWorker.instance
 instance.start

@@ -33,6 +33,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'drb'
   spec.add_dependency 'dry-configurable'
   spec.add_development_dependency 'byebug'
+  gem.post_install_message = <<-MESSAGE
+    This gem is going to change it's name to Belated!
+    HardWorker will no longer be maintained.
+    If you happen to use this gem, please consider switching to Belated.
+    https://github.com/sampokuokkanen/belated
+  MESSAGE
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
