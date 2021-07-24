@@ -1,4 +1,4 @@
-# Hardworker
+# Belated
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sampokuokkanen/belated/badge)](https://www.codefactor.io/repository/github/sampokuokkanen/belated) [![Gem Version](https://badge.fury.io/rb/belated.svg)](https://badge.fury.io/rb/belated)
 
@@ -70,7 +70,8 @@ dummy.queue.push(proc { 2 / 1 })
 dummy.queue.push(DumDum.new)
 ```
 
-Hardworker runs on localhost, port 8788. Should probably make that a value you can change...
+Belated runs on localhost, port 8788. 
+Going to make that an option in the future.
 
 ## Rails
 
@@ -126,7 +127,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/sampokuokkanen/belated. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/sampokuokkanen/belated. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/sampokuokkanen/belated/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -134,4 +135,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Belated project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/hardworker/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Belated project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/sampokuokkanen/belated/blob/main/CODE_OF_CONDUCT.md).
