@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Sampo Kuokkanen']
   spec.email         = ['sampo.kuokkanen@gmail.com']
 
-  spec.summary       = 'dRuby background jobs.'
+  spec.summary       = 'Run background jobs with Belated and dRuby!'
   spec.description   = %(
     A simple Ruby backend job framework without Redis or PostgreSQL dependency.
     Used to be named HardWorker.
