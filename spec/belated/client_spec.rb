@@ -2,22 +2,16 @@ require 'byebug'
 require 'dumdum'
 require 'rails_helper'
 
-RSpec.describe HardWorker::Client do
-  describe 'client' do
-    it 'has a client class than can be instantiated' do
-      expect(HardWorker::Client.new).not_to be nil
-    end
-  end
-
+RSpec.describe Belated::Client do
   describe 'adding jobs' do
     it 'adds a job to the queue' do
-      HardWorker.configure do |config|
+      Belated.configure do |config|
         config.rails = true
         config.workers = 1
         config.connect = true
       end
-      worker = Thread.new { HardWorker.new }
-      client = HardWorker::Client.new
+      worker = Thread.new { Belated.new }
+      client = Belated::Client.new
       expect {
         client.perform_belated(proc { User.create!(name: 'Diana') })
         sleep 0.04

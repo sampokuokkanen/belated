@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-require_relative 'hard_worker/version'
-require_relative 'hard_worker/worker'
+require_relative 'belated/version'
+require_relative 'belated/worker'
 require 'drb'
 require 'yaml'
 require 'singleton'
 require 'dry-configurable'
-require 'hard_worker/client'
-require 'hard_worker/rails' if defined?(::Rails::Engine)
+require 'belated/client'
+require 'belated/rails' if defined?(::Rails::Engine)
 
-# HardWorker is a pure Ruby job backend.
+# Belated is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
 # jobs as procs, but that might make it useful if you don't
 # need anything as big as Redis.
 # Saves jobs into a file as YAML as long as they're not procs
 # and reloads them when started again.
-class HardWorker
+class Belated
   extend Dry::Configurable
   include Singleton unless $TESTING
   URI = "druby://localhost:#{$TESTING ? Array.new(4) { rand(10) }.join : "8788"}"
-  FILE_NAME = 'hard_worker_dump'
+  FILE_NAME = 'belated_dump'
   @@queue = Queue.new
 
   setting :rails, true
@@ -28,14 +28,18 @@ class HardWorker
   setting :connect, true
   setting :environment, 'development'
 
+  # Since it's running as a singleton, we need something to start it up.
+  # Aliased for testing purposes.
+  # This is only run from the bin file.
   def start
     boot_app
     load_jobs
     @worker_list = []
-    HardWorker.config.workers.times do |_i|
+    Belated.config.workers.times do |_i|
       @worker_list << Thread.new { Worker.new }
     end
-    return unless HardWorker.config.connect
+    pp stats
+    return unless Belated.config.connect
 
     DRb.start_service(URI, @@queue, verbose: true)
     puts banner_and_info
@@ -46,24 +50,24 @@ class HardWorker
   def boot_app
     return unless rails?
 
-    ENV['RAILS_ENV'] ||= HardWorker.config.environment
-    require File.expand_path("#{HardWorker.config.rails_path}/config/environment.rb")
+    ENV['RAILS_ENV'] ||= Belated.config.environment
+    require File.expand_path("#{Belated.config.rails_path}/config/environment.rb")
     require 'rails/all'
-    require 'hard_worker/rails'
+    require 'belated/rails'
   end
 
   def rails?
-    HardWorker.config.rails
+    Belated.config.rails
   end
 
   def load_jobs
+    return unless File.exist?(Belated::FILE_NAME)
+
     jobs = YAML.load(File.binread(FILE_NAME))
     jobs.each do |job|
       @@queue.push(job)
     end
-    File.delete(HardWorker::FILE_NAME) if File.exist?(HardWorker::FILE_NAME)
-  rescue StandardError
-    # do nothing
+    File.delete(Belated::FILE_NAME)
   end
 
   def reload
@@ -74,7 +78,10 @@ class HardWorker
     @worker_list.each do |worker|
       Thread.kill(worker)
     end
+    return if @@queue.empty?
+
     class_array = []
+
     @@queue.size.times do |_i|
       next if (klass_or_proc = @@queue.pop).instance_of?(Proc)
 
@@ -96,8 +103,6 @@ class HardWorker
     File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
   end
 
-  # rubocop:disable Layout/LineLength
-  # rubocop:disable Metrics/MethodLength
   def banner
     <<-'BANNER'
     .----------------. .----------------. .----------------. .----------------. .----------------. .----------------. .----------------. 
@@ -116,9 +121,8 @@ class HardWorker
 
   def banner_and_info
     puts banner
-    puts 'HardWorker is going to change to Belated!'
-    puts "Currently running HardWorker version #{HardWorker::VERSION}"
-    puts %(HardWorker running #{@worker_list&.length.to_i} workers on #{URI}...)
+    puts "Currently running Belated version #{Belated::VERSION}"
+    puts %(Belated running #{@worker_list&.length.to_i} workers on #{URI}...)
   end
 
   def stats

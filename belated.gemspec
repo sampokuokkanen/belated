@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
-require_relative 'lib/hard_worker/version'
+require_relative 'lib/belated/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'hard_worker'
-  spec.version       = HardWorker::VERSION
+  spec.name          = 'belated'
+  spec.version       = Belated::VERSION
   spec.authors       = ['Sampo Kuokkanen']
   spec.email         = ['sampo.kuokkanen@gmail.com']
 
-  spec.summary       = 'Just another Ruby background job library.'
+  spec.summary       = 'dRuby background jobs.'
   spec.description   = %(
-    A very, very simple Ruby background job library, that does not have many features, and almost works.
+    A simple Ruby backend job framework without Redis or PostgreSQL dependency.
+    Used to be named HardWorker.
   ).gsub(/\s+/, ' ').strip
-  spec.homepage      = 'https://github.com/sampokuokkanen/hard_worker'
+  spec.homepage      = 'https://github.com/sampokuokkanen/belated'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')
 
@@ -26,19 +27,13 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
   end
   spec.bindir = 'bin'
-  spec.executables   = ['hard_worker']
+  spec.executables   = ['belated']
   spec.require_paths = ['lib']
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency 'drb'
   spec.add_dependency 'dry-configurable'
   spec.add_development_dependency 'byebug'
-  spec.post_install_message = <<-MESSAGE
-    This gem is going to change it's name to Belated!
-    HardWorker will no longer be maintained.
-    If you happen to use this gem, please consider switching to Belated.
-    https://github.com/sampokuokkanen/belated
-  MESSAGE
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html

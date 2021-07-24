@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hard_worker (0.0.4)
+    belated (0.1.0)
       drb
       dry-configurable
 
@@ -179,8 +179,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  belated!
   byebug
-  hard_worker!
   rails (>= 6.1.3)
   rake (~> 13.0)
   rspec (~> 3.0)

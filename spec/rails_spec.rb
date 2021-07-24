@@ -1,19 +1,19 @@
 require 'dummy_worker'
 require 'rails_helper'
 
-RSpec.describe HardWorker do
+RSpec.describe Belated do
   before do
-    HardWorker.configure do |config|
+    Belated.configure do |config|
       config.rails = true
       config.workers = 1
     end
-    @worker = Thread.new { HardWorker.new }
+    @worker = Thread.new { Belated.new }
     DRb.start_service
     @dummy = DummyWorker.new
   end
 
   after do
-    HardWorker.stop_workers
+    Belated.stop_workers
     @worker.kill
   end
 

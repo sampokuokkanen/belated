@@ -1,9 +1,9 @@
-class HardWorker
+class Belated
   class Client
     attr_accessor :queue
 
     def initialize
-      server_uri = HardWorker::URI
+      server_uri = Belated::URI
       DRb.start_service
       self.queue = DRbObject.new_with_uri(server_uri)
     end

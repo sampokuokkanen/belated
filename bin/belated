@@ -3,36 +3,36 @@
 
 $TESTING = false
 $LOAD_PATH.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
-require 'hard_worker'
+require 'belated'
 require 'optparse'
 require 'byebug'
 
-OptionParser.new do |opts|
-  opts.banner = 'Usage: hard_worker [options]'
+OptionParser.new { |opts|
+  opts.banner = 'Usage: belated [options]'
 
   opts.separator ''
   opts.separator 'Options:'
 
   opts.on('-r=RAILS', '--rails=RAILS', 'Load Rails or not, default true') do |rails|
-    HardWorker.config.rails = rails == 'true'
+    Belated.config.rails = rails == 'true'
   end
 
   opts.on('-r_path=PATH', '--rails_path=PATH', 'Path to Rails') do |path|
-    HardWorker.config.rails_path = path
+    Belated.config.rails_path = path
   end
 
   opts.on('-w=WORKERS', '--workers=WORKERS', 'Number of workers, default 1') do |workers|
-    HardWorker.config.workers = workers.to_i
+    Belated.config.workers = workers.to_i
   end
 
   opts.on('-e=ENV', '--env=ENV', 'Environment, default development') do |env|
-    HardWorker.config.env = env
+    Belated.config.env = env
   end
 
   opts.on('-c=CONNECT', '--connect=CONNECT', 'Start dRuby connection, default true') do |connect|
-    HardWorker.config.connect = connect == 'true'
+    Belated.config.connect = connect == 'true'
   end
-end.parse!
+}.parse!
 
-instance = HardWorker.instance
+instance = Belated.instance
 instance.start

@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in hard_worker.gemspec
+# Specify your gem's dependencies in belated.gemspec
 gemspec
 
 gem 'rake', '~> 13.0'

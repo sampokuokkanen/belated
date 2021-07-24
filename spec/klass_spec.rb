@@ -1,11 +1,11 @@
 require 'dumdum'
 
-RSpec.describe HardWorker do
+RSpec.describe Belated do
   it 'can enqueue classes too' do
-    HardWorker.configure do |config|
+    Belated.configure do |config|
       config.rails = false
     end
-    worker = HardWorker.new
+    worker = Belated.new
     10.times do
       worker.job_list.push(DumDum.new)
     end

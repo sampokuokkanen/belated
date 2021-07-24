@@ -1,14 +1,14 @@
-RSpec.describe HardWorker do
+RSpec.describe Belated do
   describe 'settings with Dry::Configurable' do
     it 'allows you to set Rails to false' do
-      HardWorker.configure do |config|
+      Belated.configure do |config|
         config.rails = false
         config.connect = false
         config.workers = 0
       end
 
-      HardWorker.new
-      expect(defined?(HardWorker::Rails)).to be_nil
+      belated = Belated.new
+      expect(belated.rails?).to be_falsey
     end
   end
 end

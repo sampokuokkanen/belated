@@ -3,18 +3,18 @@
 require 'dummy_worker'
 require 'dumdum'
 
-RSpec.describe HardWorker do
+RSpec.describe Belated do
   describe 'job processing' do
     it 'allows you to run code in the background' do
-      HardWorker.config.rails = false
-      HardWorker.config.connect = true
-      HardWorker.config.workers = 1
-      thread = Thread.new { HardWorker.new }
+      Belated.config.rails = false
+      Belated.config.connect = true
+      Belated.config.workers = 1
+      thread = Thread.new { Belated.new }
       dummy = DummyWorker.new
       dummy.queue.push(DumDum.new)
       sleep 0.05
       expect(dummy.queue.empty?).to be_truthy
-      HardWorker.stop_workers
+      Belated.stop_workers
       thread.kill
     end
   end

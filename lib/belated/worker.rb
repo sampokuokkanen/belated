@@ -1,4 +1,4 @@
-class HardWorker
+class Belated
   # The worker class that actually gets the jobs from the queue
   # and calls them. Expects the jobs to be procs.
   class Worker
@@ -8,7 +8,7 @@ class HardWorker
 
     def start_working
       loop do
-        job = HardWorker.fetch_job
+        job = Belated.fetch_job
         next unless job
 
         call_job(job)
