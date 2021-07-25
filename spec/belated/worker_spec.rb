@@ -14,9 +14,9 @@ RSpec.describe Belated::Worker do
     Belated.stop_workers
     @worker.kill
   end
-  
+
   it 'does not stop processing jobs if there is a crash' do
-    @client.perform_belated(proc { 2 / 0})
+    @client.perform_belated(proc { 2 / 0 })
     sleep 0.01
     @client.perform_belated(proc { 4 / 2 })
     sleep 0.01
