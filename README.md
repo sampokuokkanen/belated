@@ -2,8 +2,8 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sampokuokkanen/belated/badge)](https://www.codefactor.io/repository/github/sampokuokkanen/belated) [![Gem Version](https://badge.fury.io/rb/belated.svg)](https://badge.fury.io/rb/belated)
 
-This is Belated, a new Ruby backend job library! It supports running procs and classes in the background.
-~~Also, you lose all jobs if you restart the process.~~ It now uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs.
+This is Belated, a new Ruby backend job library! It supports running procs and classes in the background. To deal with restarts, it uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs.
+
 Note that Belated used to be called HardWorker. That name was already in use in Sidekiq documentation and a bit too generic anyway. 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.
@@ -15,6 +15,7 @@ TODO LIST:
 - ~~Support Rails~~ (Supported!)
 - ~~Parse options from command line, eg. `--workers 10`~~(Done!)
 - Don't crash on errors
+- Add a logger
 - Make it possible to schedule jobs
 - Maybe support ActiveJob?
 - Have a web UI

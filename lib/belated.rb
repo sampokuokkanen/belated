@@ -7,7 +7,6 @@ require 'yaml'
 require 'singleton'
 require 'dry-configurable'
 require 'belated/client'
-require 'belated/rails' if defined?(::Rails::Engine)
 
 # Belated is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
@@ -145,3 +144,5 @@ class Belated
 
   class Error < StandardError; end
 end
+
+require 'belated/rails' if defined?(::Rails::Engine)

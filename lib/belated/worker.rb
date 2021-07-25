@@ -22,6 +22,8 @@ class Belated
       else
         pp job&.perform
       end
+    rescue StandardError => e
+      pp e.inspect
     end
   end
 end
