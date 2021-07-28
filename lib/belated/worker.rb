@@ -2,6 +2,7 @@ class Belated
   # The worker class that actually gets the jobs from the queue
   # and calls them. Expects the jobs to be procs.
   class Worker
+    
     def initialize
       start_working
     end
@@ -18,12 +19,12 @@ class Belated
 
     def call_job(job)
       if job.respond_to?(:call)
-        pp job.call
+        Belated.config.logger job.call
       else
-        pp job&.perform
+        Belated.config.loggerr job.perform
       end
     rescue StandardError => e
-      pp e.inspect
+      Belated.config.logger e.inspect
     end
   end
 end

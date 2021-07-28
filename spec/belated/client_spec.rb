@@ -19,4 +19,11 @@ RSpec.describe Belated::Client do
       worker.kill
     end
   end
+
+  # describe 'client can recover from not having connection' do
+  #   client = Belated::Client.new
+  #   expect(
+  #     client.perform_belated(proc { 2/ 1})
+  #   ).not_to raise_error
+  # end
 end

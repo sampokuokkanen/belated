@@ -7,6 +7,7 @@ require 'yaml'
 require 'singleton'
 require 'dry-configurable'
 require 'belated/client'
+require 'logger'
 
 # Belated is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
@@ -26,6 +27,11 @@ class Belated
   setting :workers, 1
   setting :connect, true
   setting :environment, 'development'
+  setting :logger, Logger.new(STDOUT)
+  setting(:log_level, :info) do |level|
+    Belated.config.logger.level = level
+  end
+
 
   # Since it's running as a singleton, we need something to start it up.
   # Aliased for testing purposes.

@@ -2,6 +2,7 @@
 
 $TESTING = true
 require 'belated'
+require 'byebug'
 Belated.config.rails_path = './dummy'
 Belated.config.workers = 0
 RSpec.configure do |config|
