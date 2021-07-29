@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.3.0] - 2021-07-29
+
+- Now there is logging! By default logs to stdout, but you can configure the logger by setting a different one through `Belated.config.logger`. 
 ## [0.2.0] - 2021-07-25
 
 - Workers now rescue StandardError and keep on working! 

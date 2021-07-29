@@ -12,10 +12,11 @@ TODO LIST:
 
 - ~~Marshal the job queue into a file so you don't lose all progress~~
   (Ended up using YAML)
+- Catch SIGTERM and friends
 - ~~Support Rails~~ (Supported!)
 - ~~Parse options from command line, eg. `--workers 10`~~(Done!)
-- Don't crash on errors
-- Add a logger
+- Don't crash on errors (Partially done)
+- ~~Add a logger~~
 - Make it possible to schedule jobs
 - Maybe support ActiveJob?
 - Have a web UI
