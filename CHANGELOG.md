@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+
+
+## [0.3.1] - 2021-07-29
+
+- Remove dummy app from gem... size should go down quite a bit. 
+
 ## [0.3.0] - 2021-07-29
 
 - Now there is logging! By default logs to stdout, but you can configure the logger by setting a different one through `Belated.config.logger`. 
