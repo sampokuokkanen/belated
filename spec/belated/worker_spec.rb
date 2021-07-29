@@ -11,7 +11,6 @@ RSpec.describe Belated::Worker do
   end
 
   after do
-    Belated.stop_workers
     @worker.kill
   end
 

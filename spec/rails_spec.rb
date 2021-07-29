@@ -12,11 +12,6 @@ RSpec.describe Belated do
     @dummy = DummyWorker.new
   end
 
-  after do
-    Belated.stop_workers
-    @worker.kill
-  end
-
   it 'Runs the code in the background, so the count does not change immediately' do
     expect {
       @dummy.queue.push(

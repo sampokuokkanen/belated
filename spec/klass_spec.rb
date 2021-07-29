@@ -11,6 +11,5 @@ RSpec.describe Belated do
     end
     sleep 0.1
     expect(worker.job_list.empty?).to be_truthy
-    worker.stop_workers
   end
 end

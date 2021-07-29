@@ -15,9 +15,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-  # config.after(:each) do
-  #   Belated.clear_queue!
-  #   DRb.stop_service
-  #   sleep 0.01
-  # end
+  config.after(:each) do
+    Belated.kill_and_clear_queue!
+  end
 end

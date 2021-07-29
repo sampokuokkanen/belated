@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'dumdum'
 
 RSpec.describe Belated do
   describe 'basics' do
@@ -18,17 +19,22 @@ RSpec.describe Belated do
       end
 
       it 'the worker class has a method that returns all jobs' do
-        expect(Belated.new.job_list).to be_empty
+        expect(Belated.new.job_list.class).to eq Queue
       end
     end
 
     it 'remembers the jobs it has enqued even if restarted' do
+      File.delete(Belated::FILE_NAME) if File.exist?(Belated::FILE_NAME)
+      Belated.config.workers = 0
+      Belated.config.connect = false
       worker = Belated.new
-      expect {
-        worker.job_list.push(DumDum.new)
-        worker.stop_workers
-        worker.reload
-      }.to change { worker.job_list.length }.by 0
+      Belated.kill_and_clear_queue!
+      5.times do
+        worker.job_list.push(DumDum.new(sleep: 1))
+      end
+      worker.stop_workers
+      worker.reload
+      expect(worker.job_list.empty?).to be_falsey
     end
   end
 
@@ -36,14 +42,15 @@ RSpec.describe Belated do
     it 'allows you to run code in the background' do
       Belated.configure do |config|
         config.rails = false
+        config.workers = 1
       end
 
       worker = Belated.new
       worker.job_list.push(proc { puts 'hello' })
       expect(worker.job_list.length).to eq 1
-      sleep 0.01
+      sleep 0.02
       expect(worker.job_list.empty?).to be_truthy
-      worker.stop_workers
+      Belated.kill_and_clear_queue!
     end
   end
 end
