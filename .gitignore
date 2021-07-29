@@ -11,4 +11,5 @@
 .rspec_status
 .byebug_history
 /dummy/tmp/cache/
+/dummy/log/
 belated_dump
