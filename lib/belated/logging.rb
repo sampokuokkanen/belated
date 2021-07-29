@@ -1,7 +1,7 @@
 class Belated
   module Logging
     extend self
-    
+
     def logger
       @logger ||= Belated.logger
     end

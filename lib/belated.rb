@@ -20,7 +20,7 @@ class Belated
   extend Dry::Configurable
   include Logging
   include Singleton unless $TESTING
-  URI = "druby://localhost:8788"
+  URI = 'druby://localhost:8788'
   FILE_NAME = 'belated_dump'
   @@queue = Queue.new
 
@@ -31,7 +31,6 @@ class Belated
   setting :environment, 'development'
   setting :logger, Logger.new($stdout), reader: true
   setting :log_level, :info, reader: true
-
 
   # Since it's running as a singleton, we need something to start it up.
   # Aliased for testing purposes.
@@ -45,20 +44,22 @@ class Belated
     end
     return unless Belated.config.connect
 
-    begin
-      DRb.start_service(URI, @@queue, verbose: true)
-    rescue DRb::DRbConnError, Errno::EADDRINUSE
-      Belated.logger.error 'Could not connect to DRb server.'
-      uri = "druby://localhost:#{ Array.new(4) { rand(10) }.join }"
-      self.class.send(:remove_const, 'URI')
-      self.class.const_set('URI', uri)
-      retry
-    end
-
+    connect!
     banner_and_info
     DRb.thread.join
   end
   alias initialize start
+
+  # Handles connection to DRb server.
+  def connect!
+    DRb.start_service(URI, @@queue, verbose: true)
+  rescue DRb::DRbConnError, Errno::EADDRINUSE
+    Belated.logger.error 'Could not connect to DRb server.'
+    uri = "druby://localhost:#{Array.new(4) { rand(10) }.join}"
+    self.class.send(:remove_const, 'URI')
+    self.class.const_set('URI', uri)
+    retry
+  end
 
   def boot_app
     return unless rails?

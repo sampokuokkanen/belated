@@ -31,6 +31,9 @@ Style/GlobalVars:
 Style/BlockDelimiters:
   EnforcedStyle: braces_for_chaining
 
+Style/ModuleFunction:
+  EnforcedStyle: extend_self
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'

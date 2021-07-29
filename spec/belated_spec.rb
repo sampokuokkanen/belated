@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'dumdum'
 
 RSpec.describe Belated do

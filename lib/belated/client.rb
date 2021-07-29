@@ -4,8 +4,8 @@ class Belated
 
     def initialize
       server_uri = Belated::URI
-      @bank = 
-      DRb.start_service
+      @bank =
+        DRb.start_service
       self.queue = DRbObject.new_with_uri(server_uri)
     end
 
