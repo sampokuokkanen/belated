@@ -10,18 +10,22 @@ It uses dRuby to do the communication! Which is absolute great. No need for Redi
 
 TODO LIST:
 
-- ~~Marshal the job queue into a file so you don't lose all progress~~
-  (Ended up using YAML)
 - Catch SIGTERM and friends
-- ~~Support Rails~~ (Supported!)
-- ~~Parse options from command line, eg. `--workers 10`~~(Done!)
+  - Now supports it, partly. 
 - Don't crash on errors (Partially done)
-- ~~Add a logger~~
 - Make it possible to schedule jobs
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
 - Add a section telling people to use Sidekiq if they can
+
+DONE
+
+- ~~Marshal the job queue into a file so you don't lose all progress~~
+  (Ended up using YAML)
+- ~~Add a logger~~
+- ~~Support Rails~~ (Supported!)
+- ~~Parse options from command line, eg. `--workers 10`~~(Done!)
 
 ## Installation
 

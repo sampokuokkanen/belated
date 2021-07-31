@@ -2,6 +2,10 @@
 
 
 
+## [0.3.2] - 2021-07-31
+
+- Trap INT and TERM, so now the shutdown is a little bit more graceful. 
+
 ## [0.3.1] - 2021-07-29
 
 - Remove dummy app from gem... size should go down quite a bit. 
