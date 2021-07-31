@@ -11,8 +11,9 @@ class Belated
 
     def start_working
       loop do
-        job = Belated.fetch_job
-        next unless job
+        next unless (job = Belated.fetch_job)
+
+        break if job == :shutdown
 
         log call_job(job)
         log 'fetching jobs...'

@@ -36,8 +36,7 @@ class Belated
   # Aliased for testing purposes.
   # This is only run from the bin file.
   def start
-    boot_app
-    load_jobs
+    boot_app && load_jobs
     @worker_list = []
     Belated.config.workers.times do |_i|
       @worker_list << Thread.new { Worker.new }
@@ -46,6 +45,7 @@ class Belated
 
     connect!
     banner_and_info
+    trap_signals
     DRb.thread.join
   end
   alias initialize start
@@ -55,10 +55,20 @@ class Belated
     DRb.start_service(URI, @@queue, verbose: true)
   rescue DRb::DRbConnError, Errno::EADDRINUSE
     Belated.logger.error 'Could not connect to DRb server.'
-    uri = "druby://localhost:#{Array.new(4) { rand(10) }.join}"
-    self.class.send(:remove_const, 'URI')
-    self.class.const_set('URI', uri)
     retry
+  end
+
+  def trap_signals
+    %w[INT TERM].each do |signal|
+      Signal.trap(signal) do
+        @worker_list.length.times do
+          @@queue.push(:shutdown)
+        end
+        Thread.new { stop_workers }
+        sleep 0.1 until @@queue.empty?
+        exit
+      end
+    end
   end
 
   def boot_app
@@ -92,6 +102,7 @@ class Belated
 
   def stop_workers
     @worker_list&.each do |worker|
+      sleep 0.1 if worker.alive?
       Thread.kill(worker)
     end
     class_array = []

@@ -12,4 +12,5 @@
 .byebug_history
 /dummy/tmp/cache/
 /dummy/log/
+/dummy/log/test.log
 belated_dump
