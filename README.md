@@ -113,15 +113,15 @@ end
 
 From command line:
 
-$ bundle exec belated --rails=true
+    $ bundle exec belated --rails=true
 
 Use Rails or not.
 
-$ bundle exec belated --rails_path=/my_rails_project
+    $ bundle exec belated --rails_path=/my_rails_project
 
 Path to Rails project.
 
-$ bundle exec belated --workers=10
+    $ bundle exec belated --workers=10
 
 Number of workers.
 
