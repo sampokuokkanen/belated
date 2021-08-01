@@ -41,5 +41,8 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Max: 200
 
+Metrics/MethodLength:
+  Max: 15
+
 Security/YAMLLoad:
   Enabled: false

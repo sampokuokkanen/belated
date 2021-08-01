@@ -1,6 +1,8 @@
 ## [Unreleased]
 
+## [0.3.3] - 2021-08-01
 
+- Shutdown trapped signal thread, make sure :shutdown is not recorded as a job. 
 
 ## [0.3.2] - 2021-07-31
 

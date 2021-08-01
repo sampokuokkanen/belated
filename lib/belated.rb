@@ -107,11 +107,12 @@ class Belated
     end
     class_array = []
     @@queue.size.times do |_i|
-      next if (klass = @@queue.pop).instance_of?(Proc)
-
-      class_array << klass
+      unless (klass = @@queue.pop).instance_of?(Proc) || klass == :shutdown
+        class_array << klass
+      end
     end
     pp File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
+    exit unless $TESTING
   end
 
   def banner
