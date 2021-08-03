@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.4.0] - 2021-08-03
+
+- Now you can enqueue jobs to be done at a later time. Just pass an `at:` keyword param to the client. 
+- Does not save the jobs when you quit. 
+
 ## [0.3.3] - 2021-08-01
 
 - Shutdown trapped signal thread, make sure :shutdown is not recorded as a job. 

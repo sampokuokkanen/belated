@@ -18,4 +18,11 @@ RSpec.configure do |config|
   config.after(:each) do
     Belated.kill_and_clear_queue!
   end
+
+  # config.around(:each) do |example|
+  #   path = "./stackprof-cpu-test-#{example.full_description.parameterize}.dump"
+  #   StackProf.run(mode: :cpu, out: path.to_s) do
+  #     example.run
+  #   end
+  # end
 end

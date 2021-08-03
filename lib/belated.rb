@@ -9,6 +9,7 @@ require 'singleton'
 require 'dry-configurable'
 require 'belated/client'
 require 'logger'
+require 'belated/queue'
 
 # Belated is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
@@ -22,7 +23,7 @@ class Belated
   include Singleton unless $TESTING
   URI = 'druby://localhost:8788'
   FILE_NAME = 'belated_dump'
-  @@queue = Queue.new
+  @@queue = Belated::Queue.new
 
   setting :rails, true
   setting :rails_path, '.'
@@ -38,15 +39,15 @@ class Belated
   def start
     boot_app && load_jobs
     @worker_list = []
-    Belated.config.workers.times do |_i|
-      @worker_list << Thread.new { Worker.new }
+    Belated.config.workers.times do |i|
+      @worker_list << Thread.new { Worker.new(number: i.next) }
     end
     return unless Belated.config.connect
 
     connect!
     banner_and_info
     trap_signals
-    DRb.thread.join
+    enqueue_future_jobs
   end
   alias initialize start
 
@@ -55,7 +56,6 @@ class Belated
     DRb.start_service(URI, @@queue, verbose: true)
   rescue DRb::DRbConnError, Errno::EADDRINUSE
     Belated.logger.error 'Could not connect to DRb server.'
-    retry
   end
 
   def trap_signals
@@ -65,7 +65,7 @@ class Belated
           @@queue.push(:shutdown)
         end
         Thread.new { stop_workers }
-        sleep 0.1 until @@queue.empty?
+        sleep 0.1 until @@queue.empty? || $TESTING
         exit
       end
     end
@@ -82,6 +82,19 @@ class Belated
 
   def rails?
     Belated.config.rails
+  end
+
+  def enqueue_future_jobs
+    log 'starting future jobs thread'
+    loop do
+      @@queue.future_jobs.each_with_index do |job, i|
+        if job[:at] <= Time.now.utc
+          log @@queue.future_jobs.delete_at(i)
+          @@queue.push(job[:klass])
+        end
+      end
+      sleep 0.01
+    end
   end
 
   def load_jobs
@@ -106,7 +119,7 @@ class Belated
       Thread.kill(worker)
     end
     class_array = []
-    @@queue.size.times do |_i|
+    @@queue.length.times do |_i|
       unless (klass = @@queue.pop).instance_of?(Proc) || klass == :shutdown
         class_array << klass
       end

@@ -13,7 +13,8 @@ TODO LIST:
 - Catch SIGTERM and friends
   - Now supports it, partly. 
 - Don't crash on errors (Partially done)
-- Make it possible to schedule jobs
+- Save jobs enqueued at a future date too when quitting (now it only saves the jobs in the queue)
+- Have multiple queues?
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
@@ -21,6 +22,7 @@ TODO LIST:
 
 DONE
 
+- ~~Make it possible to schedule jobs~~
 - ~~Marshal the job queue into a file so you don't lose all progress~~
   (Ended up using YAML)
 - ~~Add a logger~~
@@ -97,6 +99,12 @@ client.perform_belated(job)
 ```
 
 If you want to pass a job to Belated.
+
+If you don't want the job to run right away, you can also pass it a keyword param `at:` like so:
+
+```ruby
+client.perform_belated(job, Time.now + 1.month)
+```
 
 # Settings
 

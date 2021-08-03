@@ -11,5 +11,8 @@ gem 'rspec', '~> 3.0'
 
 gem 'rubocop', '~> 1.7'
 
+gem 'database_cleaner-active_record'
 gem 'rails', '>= 6.1.3'
+gem 'rspec-rails'
 gem 'sqlite3'
+gem 'stackprof'

@@ -6,10 +6,10 @@ RSpec.describe Belated do
       config.rails = false
     end
     worker = Belated.new
-    10.times do
+    5.times do
       worker.job_list.push(DumDum.new)
     end
-    sleep 0.1
-    expect(worker.job_list.empty?).to be_truthy
+    sleep 0.2
+    expect(worker.job_list.length).to eq 0
   end
 end

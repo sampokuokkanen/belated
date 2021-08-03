@@ -20,7 +20,7 @@ RSpec.describe Belated do
       end
 
       it 'the worker class has a method that returns all jobs' do
-        expect(Belated.new.job_list.class).to eq Queue
+        expect(Belated.new.job_list.class).to eq Belated::Queue
       end
     end
 

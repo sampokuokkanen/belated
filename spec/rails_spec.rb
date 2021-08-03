@@ -8,22 +8,24 @@ RSpec.describe Belated do
       config.workers = 1
     end
     @worker = Thread.new { Belated.new }
-    DRb.start_service
     @dummy = DummyWorker.new
+  end
+
+  after do
+    @worker.kill
   end
 
   it 'Runs the code in the background, so the count does not change immediately' do
     expect {
       @dummy.queue.push(
         proc do
-          sleep 0.01
+          sleep 0.1
           User.create!(name: 'David')
         end
       )
-    }.to change(User, :count).by(0)
+    }.to change { User.where(name: 'David').count }.by(0)
     expect {
-      sleep 0.09
-    }.to change(User, :count).by(1)
+      sleep 0.11
+    }.to change { User.where(name: 'David').count }.by(1)
   end
-  User.all.delete_all
 end

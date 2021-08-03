@@ -14,3 +14,4 @@
 /dummy/log/
 /dummy/log/test.log
 belated_dump
+stackprof*
