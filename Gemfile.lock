@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.3.3)
+    belated (0.4.0)
       drb
       dry-configurable
 
