@@ -8,12 +8,13 @@ Note that Belated used to be called HardWorker. That name was already in use in 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.
 
+Can be used with or without Rails. 
+
 TODO LIST:
 
 - Catch SIGTERM and friends
   - Now supports it, partly. 
 - Don't crash on errors (Partially done)
-- Save jobs enqueued at a future date too when quitting (now it only saves the jobs in the queue)
 - Have multiple queues?
 - Maybe support ActiveJob?
 - Have a web UI

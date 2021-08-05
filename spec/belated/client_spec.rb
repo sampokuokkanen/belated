@@ -21,7 +21,7 @@ RSpec.describe Belated::Client do
     it 'adds a job to the queue' do
       expect {
         @client.perform_belated(proc { User.create!(name: 'Diana') })
-        sleep 0.04
+        sleep 0.05
       }.to change { User.all.count }.by(1)
     end
 

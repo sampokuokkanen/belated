@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.4.1] - 2021-08-05
+
+- Now handles saving future jobs too! So if you have a job enqueued for tomorrow, and restart Belated, it should still be enqueued. 
+
 ## [0.4.0] - 2021-08-03
 
 - Now you can enqueue jobs to be done at a later time. Just pass an `at:` keyword param to the client. 
