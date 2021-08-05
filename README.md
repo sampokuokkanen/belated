@@ -99,6 +99,8 @@ If you don't want the job to run right away, you can also pass it a keyword para
 client.perform_belated(job, Time.now + 1.month)
 ```
 
+Note that you probably want to memoize the client, as it always creates a 'banker thread' now if you have no connection. Maybe even use it as a global!(`$client`)
+
 # Settings
 
 Configuring Belated:
