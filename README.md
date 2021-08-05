@@ -12,23 +12,15 @@ Can be used with or without Rails.
 
 TODO LIST:
 
-- Catch SIGTERM and friends
-  - Now supports it, partly. 
+- Add some checks to the client for proper jobs.
 - Don't crash on errors (Partially done)
 - Have multiple queues?
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
+- Deploy a Rails app to production that is using Belated
+  and mention it in the readme. 
 - Add a section telling people to use Sidekiq if they can
-
-DONE
-
-- ~~Make it possible to schedule jobs~~
-- ~~Marshal the job queue into a file so you don't lose all progress~~
-  (Ended up using YAML)
-- ~~Add a logger~~
-- ~~Support Rails~~ (Supported!)
-- ~~Parse options from command line, eg. `--workers 10`~~(Done!)
 
 ## Installation
 

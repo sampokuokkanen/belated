@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.4.2] - 2021-08-05
+
+- Client also handles no connection, now it saves jobs to a bank and adds them to the queue once it has a connection.  
 ## [0.4.1] - 2021-08-05
 
 - Now handles saving future jobs too! So if you have a job enqueued for tomorrow, and restart Belated, it should still be enqueued. 
