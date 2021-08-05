@@ -24,18 +24,31 @@ RSpec.describe Belated do
       end
     end
 
-    it 'remembers the jobs it has enqued even if restarted' do
-      File.delete(Belated::FILE_NAME) if File.exist?(Belated::FILE_NAME)
-      Belated.config.workers = 0
-      Belated.config.connect = false
-      worker = Belated.new
-      Belated.kill_and_clear_queue!
-      5.times do
-        worker.job_list.push(DumDum.new(sleep: 1))
+    context 'remembering jobs during restart' do
+      before do
+        Belated.config.workers = 0
+        Belated.config.connect = false
+        @worker = Belated.new
+        Belated.kill_and_clear_queue!
       end
-      worker.stop_workers
-      worker.reload
-      expect(worker.job_list.empty?).to be_falsey
+
+      it 'remembers the jobs it has enqued even if restarted' do
+        5.times do
+          @worker.job_list.push(DumDum.new(sleep: 1))
+        end
+        @worker.stop_workers
+        @worker.reload
+        expect(@worker.job_list.empty?).to be_falsey
+      end
+
+      it 'remembers future jobs it has enqued even if restarted' do
+        5.times do
+          @worker.job_list.push(DumDum.new(sleep: 1), at: Time.now + 500)
+        end
+        @worker.stop_workers
+        @worker.reload
+        expect(@worker.job_list.future_jobs.length).to eq 5
+      end
     end
   end
 

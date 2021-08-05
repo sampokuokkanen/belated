@@ -22,7 +22,6 @@ class Belated
   include Logging
   include Singleton unless $TESTING
   URI = 'druby://localhost:8788'
-  FILE_NAME = 'belated_dump'
   @@queue = Belated::Queue.new
 
   setting :rails, true
@@ -37,7 +36,7 @@ class Belated
   # Aliased for testing purposes.
   # This is only run from the bin file.
   def start
-    boot_app && load_jobs
+    boot_app && @@queue.load_jobs
     @worker_list = []
     Belated.config.workers.times do |i|
       @worker_list << Thread.new { Worker.new(number: i.next) }
@@ -97,20 +96,9 @@ class Belated
     end
   end
 
-  def load_jobs
-    log "reloading... if file exists #{File.exist?(Belated::FILE_NAME)}"
-    return unless File.exist?(Belated::FILE_NAME)
-
-    jobs = YAML.load(File.binread(FILE_NAME))
-    jobs.each do |job|
-      @@queue.push(job)
-    end
-    File.delete(Belated::FILE_NAME)
-  end
-
   def reload
     log 'reloading...'
-    load_jobs
+    @@queue.load_jobs
   end
 
   def stop_workers
@@ -118,13 +106,7 @@ class Belated
       sleep 0.1 if worker.alive?
       Thread.kill(worker)
     end
-    class_array = []
-    @@queue.length.times do |_i|
-      unless (klass = @@queue.pop).instance_of?(Proc) || klass == :shutdown
-        class_array << klass
-      end
-    end
-    pp File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
+    @@queue.save_jobs
     exit unless $TESTING
   end
 
