@@ -4,6 +4,8 @@
 
 This is Belated, a new Ruby backend job library! It supports running procs and classes in the background. To deal with restarts, it uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs.
 
+Belated uses the Ruby Queue class, so it's First In, First Out (FIFO). 
+
 Note that Belated used to be called HardWorker. That name was already in use in Sidekiq documentation and a bit too generic anyway. 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.

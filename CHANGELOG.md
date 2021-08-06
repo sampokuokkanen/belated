@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.4.3] - 2021-08-06
+
+- Client now starts the banker thread to execute jobs that were enqueued when there was no connection to Belated only if necessary. 
 ## [0.4.2] - 2021-08-05
 
 - Client also handles no connection, now it saves jobs to a bank and adds them to the queue once it has a connection.  

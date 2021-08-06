@@ -13,14 +13,19 @@ class Belated
     # @return [void]
     def initialize
       server_uri = Belated::URI
-      # @bank =
       DRb.start_service
       self.bank = Thread::Queue.new
       self.queue = DRbObject.new_with_uri(server_uri)
+    end
+
+    # Thread in charge of handling the bank queue.
+    # You probably want to memoize the client in order to avoid
+    # having many threads in the sleep state.
+    # @return [void]
+    def start_banker_thread
       self.banker_thread = Thread.new do
         loop do
-          sleep 0.05
-          next unless (job, at = bank.pop)
+          job, at = bank.pop
 
           perform(job, at: at)
         end
@@ -36,6 +41,8 @@ class Belated
       queue.push(job, at: at)
     rescue DRb::DRbConnError
       bank.push([job, at])
+      start_banker_thread if banker_thread.nil?
+      # banker_thread.wakeup if banker_thread.status == 'sleep'
     end
     alias perform_belated perform
     alias perform_later perform
