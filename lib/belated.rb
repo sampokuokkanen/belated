@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
+require_relative 'belated/logging'
 require_relative 'belated/version'
 require_relative 'belated/worker'
-require_relative 'belated/logging'
-require 'drb'
-require 'yaml'
-require 'singleton'
-require 'dry-configurable'
 require 'belated/client'
-require 'logger'
 require 'belated/queue'
+require 'drb'
+require 'dry-configurable'
+require 'logger'
+require 'singleton'
+require 'yaml'
 
 # Belated is a pure Ruby job backend.
 # It has limited functionality, as it only accepts
@@ -64,7 +64,11 @@ class Belated
           @@queue.push(:shutdown)
         end
         Thread.new { stop_workers }
-        sleep 0.1 until @@queue.empty? || $TESTING
+        # Max 30 seconds to shutdown
+        timeout = 0
+        until (timeout += 0.1) >= 30 || @@queue.empty? || $TESTING
+          sleep 0.1
+        end
         exit
       end
     end

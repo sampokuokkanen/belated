@@ -53,17 +53,29 @@ RSpec.describe Belated do
   end
 
   describe 'job processing' do
-    it 'allows you to run code in the background' do
+    before do
       Belated.configure do |config|
         config.rails = false
         config.workers = 1
       end
 
-      worker = Belated.new
-      worker.job_list.push(proc { puts 'hello' })
-      expect(worker.job_list.length).to eq 1
+      @worker = Belated.new
+    end
+
+    it 'will not crash with syntax errors' do
+      expect {
+        @worker.job_list.push(
+          proc { raise SyntaxError }
+        )
+        sleep 0.01
+      }.not_to raise_error
+    end
+
+    it 'allows you to run code in the background' do
+      @worker.job_list.push(proc { puts 'hello' })
+      expect(@worker.job_list.length).to eq 1
       sleep 0.02
-      expect(worker.job_list.empty?).to be_truthy
+      expect(@worker.job_list.empty?).to be_truthy
       Belated.kill_and_clear_queue!
     end
   end

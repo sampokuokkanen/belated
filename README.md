@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sampokuokkanen/belated/badge)](https://www.codefactor.io/repository/github/sampokuokkanen/belated) [![Gem Version](https://badge.fury.io/rb/belated.svg)](https://badge.fury.io/rb/belated)
 
-This is Belated, a new Ruby backend job library! It supports running procs and classes in the background. To deal with restarts, it uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs.
+This is Belated, a new Ruby backend job library! It supports running procs, lambdas and classes in the background. To deal with restarts, it uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs. There is no way in Ruby to save procs or lambdas to a file, so they are discarded when the process restarts.
 
 Belated uses the Ruby Queue class, so it's First In, First Out (FIFO). 
 
@@ -14,14 +14,14 @@ Can be used with or without Rails.
 
 TODO LIST:
 
+- Add retries for jobs
 - Add some checks to the client for proper jobs.
-- Don't crash on errors (Partially done)
 - Have multiple queues?
 - Maybe support ActiveJob?
 - Have a web UI
 - Do some performance testing
 - Deploy a Rails app to production that is using Belated
-  and mention it in the readme. 
+  and mention it in the readme. (Capistrano support?)
 - Add a section telling people to use Sidekiq if they can
 
 ## Installation
@@ -90,6 +90,7 @@ and you can use the client!
 Call
 
 ```ruby
+job = proc { 2 / 1 }
 client.perform_belated(job)
 ```
 
@@ -101,7 +102,7 @@ If you don't want the job to run right away, you can also pass it a keyword para
 client.perform_belated(job, Time.now + 1.month)
 ```
 
-Note that you probably want to memoize the client, as it always creates a 'banker thread' now if you have no connection. Maybe even use it as a global!(`$client`)
+Note that you probably want to memoize the client, as it always creates a 'banker thread' now if you have no connection and there is the overhead of connecting to dRuby. Maybe even use it as a global!(`$client`)
 
 # Settings
 

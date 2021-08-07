@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+
+## [0.4.4] - 2021-08-07
+
+- Now if you pass something with a syntax error in it as a job, it should not bring down the whole app! 
+
 ## [0.4.3] - 2021-08-06
 
 - Client now starts the banker thread to execute jobs that were enqueued when there was no connection to Belated only if necessary. 
