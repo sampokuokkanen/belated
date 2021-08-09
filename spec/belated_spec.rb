@@ -50,8 +50,9 @@ RSpec.describe Belated do
           @worker.job_list.push(
             Belated::JobWrapper.new(
               job: DumDum.new(sleep: 1),
-              at: Time.now.utc + 500)
+              at: Time.now.utc + 500
             )
+          )
         end
         @worker.stop_workers
         @worker.reload

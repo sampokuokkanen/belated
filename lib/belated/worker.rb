@@ -20,7 +20,7 @@ class Belated
 
         log "Worker #{@number} got job: #{job.inspect}"
         if job.respond_to?(:job)
-          log call_job(job.job) 
+          log call_job(job.job)
         else
           log call_job(job)
         end

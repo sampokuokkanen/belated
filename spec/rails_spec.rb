@@ -22,8 +22,7 @@ RSpec.describe Belated do
           proc do
             sleep 0.1
             User.create!(name: 'David')
-          end
-        )
+          end)
       )
     }.to change { User.where(name: 'David').count }.by(0)
     expect {

@@ -65,7 +65,7 @@ RSpec.describe Belated::Client do
     end
 
     it 'retries the jobs' do
-      
+      'To be continued'
     end
   end
 end
