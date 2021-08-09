@@ -7,7 +7,9 @@ RSpec.describe Belated do
     end
     worker = Belated.new
     5.times do
-      worker.job_list.push(DumDum.new)
+      worker.job_list.push(
+        Belated::JobWrapper.new(job: DumDum.new)
+      )
     end
     sleep 0.2
     expect(worker.job_list.length).to eq 0

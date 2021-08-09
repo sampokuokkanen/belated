@@ -18,10 +18,12 @@ RSpec.describe Belated do
   it 'Runs the code in the background, so the count does not change immediately' do
     expect {
       @dummy.queue.push(
-        proc do
-          sleep 0.1
-          User.create!(name: 'David')
-        end
+        Belated::JobWrapper.new(job:
+          proc do
+            sleep 0.1
+            User.create!(name: 'David')
+          end
+        )
       )
     }.to change { User.where(name: 'David').count }.by(0)
     expect {
