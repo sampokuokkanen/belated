@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+Job retries!
 
 ## [0.4.4] - 2021-08-07
 

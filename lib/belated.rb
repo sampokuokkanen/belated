@@ -156,12 +156,16 @@ class Belated
     @@queue.clear
   end
 
+  def self.fetch_job
+    @@queue.pop
+  end
+  
   def job_list
     @@queue
   end
 
-  def self.fetch_job
-    @@queue.pop
+  def self.job_list
+    @@queue
   end
 
   class Error < StandardError; end

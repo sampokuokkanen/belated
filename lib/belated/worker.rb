@@ -19,29 +19,8 @@ class Belated
         break if job == :shutdown
 
         log "Worker #{@number} got job: #{job.inspect}"
-        if job.respond_to?(:job)
-          log call_job(job.job)
-        else
-          log call_job(job)
-        end
-      end
-    end
-
-    # rubocop:disable Lint/RescueException
-    def call_job(job)
-      if job.respond_to?(:call)
-        job.call
-      else
         job.perform
       end
-    rescue Exception => e
-      case e.class
-      when Interrupt, SignalException
-        raise e
-      else
-        "Error while executing job, #{e.inspect}"
-      end
     end
-    # rubocop:enable Lint/RescueException
   end
 end
