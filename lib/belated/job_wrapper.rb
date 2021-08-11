@@ -26,15 +26,19 @@ class Belated
       when Interrupt, SignalException
         raise e
       else
-        self.retries += 1
-        unless retries > max_retries
-          self.at = Time.now.utc + (retries.next ** 4)
-          log "Job #{id} failed, retrying at #{at}"
-          Belated.job_list.push(self)
-        end
-        "Error while executing job, #{e.inspect}"
+        retry_job
+        "Error while executing job, #{e.inspect}. Retry #{retries} of #{max_retries}"
       end
     end
     # rubocop:enable Lint/RescueException
+
+    def retry_job
+      self.retries += 1
+      return if retries > max_retries
+
+      self.at = Time.now.utc + (retries.next**4)
+      log "Job #{id} failed, retrying at #{at}"
+      Belated.job_list.push(self)
+    end
   end
 end

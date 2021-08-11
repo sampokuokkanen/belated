@@ -11,7 +11,7 @@ RSpec.describe Belated::JobWrapper do
   describe '#perform' do
     it 'should retry the job until it succeeds' do
       subject.job = proc { raise 'error' }
-      expect{ 
+      expect {
         subject.perform
       }.to change { subject.retries }.from(0).to(1)
       expect(Belated.job_list.future_jobs.empty?).to be_falsey

@@ -159,7 +159,7 @@ class Belated
   def self.fetch_job
     @@queue.pop
   end
-  
+
   def job_list
     @@queue
   end
