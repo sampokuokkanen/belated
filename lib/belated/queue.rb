@@ -2,6 +2,7 @@
 
 require 'belated/job'
 require 'belated/logging'
+require 'belated/job_wrapper'
 class Belated
   class Queue
     include Logging
@@ -14,11 +15,11 @@ class Belated
       self.future_jobs = future_jobs
     end
 
-    def push(job, at: nil)
-      if at.nil?
+    def push(job)
+      if job.at.nil? || job.at <= Time.now.utc
         @queue.push(job)
       else
-        @future_jobs << Job.new(job, at)
+        @future_jobs << job
       end
     end
 
@@ -45,7 +46,7 @@ class Belated
 
       jobs = YAML.load(File.binread(FILE_NAME))
       jobs.each do |job|
-        if job.is_a?(Job)
+        if job.at && job.at > Time.now.utc
           future_jobs.push(job)
         else
           @queue.push(job)
@@ -73,7 +74,7 @@ class Belated
     private
 
     def proc_or_shutdown?(job)
-      job.instance_of?(Proc) || job == :shutdown
+      job.job.instance_of?(Proc) || job == :shutdown
     end
   end
 end

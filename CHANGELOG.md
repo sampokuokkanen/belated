@@ -1,6 +1,11 @@
 ## [Unreleased]
 
 
+## [0.5.0] - 2021-08-07
+
+- Job retries! The jobs now have ids, so you can follow the job and it's retries from the log. 
+- Quite a lot has changed internally, so if you were not using the Belated::Queue class to enqueue your jobs, you will need to update your code.
+
 ## [0.4.4] - 2021-08-07
 
 - Now if you pass something with a syntax error in it as a job, it should not bring down the whole app! 

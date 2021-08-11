@@ -33,8 +33,12 @@ RSpec.describe Belated do
       end
 
       it 'remembers the jobs it has enqued even if restarted' do
-        5.times do
-          @worker.job_list.push(DumDum.new(sleep: 1))
+        8.times do
+          @worker.job_list.push(
+            Belated::JobWrapper.new(
+              job: DumDum.new(sleep: 10)
+            )
+          )
         end
         @worker.stop_workers
         @worker.reload
@@ -43,7 +47,12 @@ RSpec.describe Belated do
 
       it 'remembers future jobs it has enqued even if restarted' do
         5.times do
-          @worker.job_list.push(DumDum.new(sleep: 1), at: Time.now + 500)
+          @worker.job_list.push(
+            Belated::JobWrapper.new(
+              job: DumDum.new(sleep: 1),
+              at: Time.now.utc + 500
+            )
+          )
         end
         @worker.stop_workers
         @worker.reload
@@ -65,14 +74,18 @@ RSpec.describe Belated do
     it 'will not crash with syntax errors' do
       expect {
         @worker.job_list.push(
-          proc { raise SyntaxError }
+          Belated::JobWrapper.new(
+            job: proc { raise SyntaxError }
+          )
         )
         sleep 0.01
       }.not_to raise_error
     end
 
     it 'allows you to run code in the background' do
-      @worker.job_list.push(proc { puts 'hello' })
+      @worker.job_list.push(
+        Belated::JobWrapper.new(job: proc { puts 'hello' })
+      )
       expect(@worker.job_list.length).to eq 1
       sleep 0.02
       expect(@worker.job_list.empty?).to be_truthy

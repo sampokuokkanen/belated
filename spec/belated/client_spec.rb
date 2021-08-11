@@ -54,12 +54,18 @@ RSpec.describe Belated::Client do
       now = Time.now.utc
       perform_at = now + 0.5
       @client.perform_belated(
-        proc { User.create!(name: 'Diana!') },
-        at: perform_at
+        Belated::JobWrapper.new(
+          job: proc { User.create!(name: 'Diana!') },
+          at: perform_at
+        )
       )
       expect(User.find_by(name: 'Diana!')).to be_nil
-      sleep 0.6
+      sleep 1.63
       expect(User.find_by(name: 'Diana!')).to be_a User
+    end
+
+    it 'retries the jobs' do
+      'To be continued'
     end
   end
 end

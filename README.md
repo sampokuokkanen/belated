@@ -10,16 +10,21 @@ Note that Belated used to be called HardWorker. That name was already in use in 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.
 
+Note that currently the timezone is hardcoded to UTC. 
+
 Can be used with or without Rails. 
 
 TODO LIST:
 
-- Add retries for jobs
+- Don't use class instance variables.
+- Make port configurable.
+- Don't hardcode timezone.
 - Add some checks to the client for proper jobs.
 - Have multiple queues?
 - Maybe support ActiveJob?
-- Have a web UI
-- Do some performance testing
+- Have a web UI.
+- Have a job history
+- Do some performance testing.
 - Deploy a Rails app to production that is using Belated
   and mention it in the readme. (Capistrano support?)
 - Add a section telling people to use Sidekiq if they can
@@ -50,15 +55,6 @@ Then, in another program, connect to Belated and give it a job to do.
 Sample below:
 
 ```ruby
-class DummyWorker
-  attr_accessor :queue
-
-  def initialize
-    server_uri = Belated::URI
-    self.queue = DRbObject.new_with_uri(server_uri)
-  end
-end
-
 class DumDum
   # classes need to have a perform method
   def perform
@@ -66,11 +62,14 @@ class DumDum
   end
 end
 
-# Need to start dRuby on the client side
-DRb.start_service
-dummy = DummyWorker.new
-dummy.queue.push(proc { 2 / 1 })
-dummy.queue.push(DumDum.new)
+client = Belated::Client.new
+client.perform_belated(proc { 2 / 1 })
+client.perform_belated(DumDum.new)
+# client.perform, client.perform_later are also good
+# if you want to do something later:
+client.perform_belated(DumDum.new, at: Time.now + 5 * 60)
+# max retries:
+client.perform_belated(DumDum.new, max_retries: 3) # default 5
 ```
 
 Belated runs on localhost, port 8788. 

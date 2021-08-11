@@ -1,3 +1,4 @@
+require 'belated/job_wrapper'
 class Belated
   # The client class is responsible for managing the connection to the
   # DRb server. If it has no connection, it adds the jobs to a bank queue.
@@ -25,9 +26,9 @@ class Belated
     def start_banker_thread
       self.banker_thread = Thread.new do
         loop do
-          job, at = bank.pop
+          job = bank.pop
 
-          perform(job, at: at)
+          perform(job)
         end
       end
     end
@@ -36,13 +37,20 @@ class Belated
     # If there is no connection, it pushes the job to the bank.
     # @param job [Object] - The the job to be pushed.
     # @param at [Date] - The time at which the job should be executed.
-    # @return [Object] - The job that was pushed.
-    def perform(job, at: nil)
-      queue.push(job, at: at)
+    # @param max_retries [Integer] - Times the job should be retried if it fails.
+    # @return [JobWrapper] - The job wrapper for the queue.
+    def perform(job, at: nil, max_retries: 5)
+      job_wrapper = if job.is_a?(JobWrapper)
+                      job
+                    else
+                      JobWrapper.new(job: job, at: at, max_retries: max_retries)
+                    end
+      pp queue.push(job_wrapper)
+      job_wrapper
     rescue DRb::DRbConnError
-      bank.push([job, at])
+      bank.push(job_wrapper)
       start_banker_thread if banker_thread.nil?
-      # banker_thread.wakeup if banker_thread.status == 'sleep'
+      banker_thread.wakeup if banker_thread.status == 'sleep'
     end
     alias perform_belated perform
     alias perform_later perform

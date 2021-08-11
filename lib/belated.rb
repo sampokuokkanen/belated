@@ -4,6 +4,7 @@ require_relative 'belated/logging'
 require_relative 'belated/version'
 require_relative 'belated/worker'
 require 'belated/client'
+require 'belated/job_wrapper'
 require 'belated/queue'
 require 'drb'
 require 'dry-configurable'
@@ -91,9 +92,9 @@ class Belated
     log 'starting future jobs thread'
     loop do
       @@queue.future_jobs.each_with_index do |job, i|
-        if job[:at] <= Time.now.utc
-          log @@queue.future_jobs.delete_at(i)
-          @@queue.push(job[:klass])
+        if job.at <= Time.now.utc
+          log "Deleting #{@@queue.future_jobs.delete_at(i)} from future jobs"
+          @@queue.push(job)
         end
       end
       sleep 0.01
@@ -155,12 +156,16 @@ class Belated
     @@queue.clear
   end
 
+  def self.fetch_job
+    @@queue.pop
+  end
+
   def job_list
     @@queue
   end
 
-  def self.fetch_job
-    @@queue.pop
+  def self.job_list
+    @@queue
   end
 
   class Error < StandardError; end
