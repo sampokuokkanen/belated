@@ -5,7 +5,6 @@ $TESTING = false
 $LOAD_PATH.unshift File.expand_path("#{File.dirname(__FILE__)}/../lib")
 require 'belated'
 require 'optparse'
-require 'byebug'
 
 OptionParser.new { |opts|
   opts.banner = 'Usage: belated [options]'
