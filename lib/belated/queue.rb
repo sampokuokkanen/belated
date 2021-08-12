@@ -16,7 +16,7 @@ class Belated
     end
 
     def push(job)
-      if job == :shutdown || job.at.nil? || 
+      if job == :shutdown || job.at.nil? ||
          job.at <= Time.now.utc
         @queue.push(job)
       else
