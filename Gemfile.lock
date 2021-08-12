@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.5.1)
+    belated (0.5.2)
       drb
       dry-configurable
 
@@ -204,4 +204,4 @@ DEPENDENCIES
   stackprof
 
 BUNDLED WITH
-   2.2.17
+   2.2.22
