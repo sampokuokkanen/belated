@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.5.1] - 2021-08-13
+
+- An error with shutdown handling was fixed.
+
 ## [0.5.1] - 2021-08-12
 
 - Requiring byebug in bin file. 😮
