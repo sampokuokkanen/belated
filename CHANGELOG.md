@@ -1,7 +1,10 @@
 ## [Unreleased]
 
+## [0.5.1] - 2021-08-12
 
-## [0.5.0] - 2021-08-07
+- Requiring byebug in bin file. 😮
+
+## [0.5.0] - 2021-08-011
 
 - Job retries! The jobs now have ids, so you can follow the job and it's retries from the log. 
 - Quite a lot has changed internally, so if you were not using the Belated::Queue class to enqueue your jobs, you will need to update your code.
