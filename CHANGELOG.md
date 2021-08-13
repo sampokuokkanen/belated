@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+
+## [0.5.3] - 2021-08-14
+
+- A bit less looping - better performance.
 ## [0.5.2] - 2021-08-13
 
 - An error with shutdown handling was fixed.
