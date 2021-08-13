@@ -43,6 +43,10 @@ RSpec.describe Belated::Client do
       @worker.kill
     end
 
+    it 'is connected' do
+      expect(@client.queue.connected?).to eq(true)
+    end
+
     it 'adds a job to the queue' do
       expect {
         @client.perform_belated(proc { User.create!(name: 'Diana') })

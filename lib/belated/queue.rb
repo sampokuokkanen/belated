@@ -72,6 +72,10 @@ class Belated
       pp File.open(FILE_NAME, 'wb') { |f| f.write(YAML.dump(class_array)) }
     end
 
+    def connected?
+      true
+    end
+
     private
 
     def proc_or_shutdown?(job)

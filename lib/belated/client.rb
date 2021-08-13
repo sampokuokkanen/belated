@@ -26,6 +26,12 @@ class Belated
     def start_banker_thread
       self.banker_thread = Thread.new do
         loop do
+          sleep 0.01
+          unless drb_connected?
+            sleep(10)
+            next
+          end
+
           job = bank.pop
 
           perform(job)
@@ -50,9 +56,16 @@ class Belated
     rescue DRb::DRbConnError
       bank.push(job_wrapper)
       start_banker_thread if banker_thread.nil?
-      banker_thread.wakeup if banker_thread.status == 'sleep'
     end
     alias perform_belated perform
     alias perform_later perform
+
+    private
+
+    def drb_connected?
+      queue.connected?
+    rescue StandardError
+      false
+    end
   end
 end
