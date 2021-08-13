@@ -16,6 +16,7 @@ Can be used with or without Rails.
 
 TODO LIST:
 
+- Rescue `DRb::DRbRemoteError`
 - Don't use class instance variables.
 - Make port configurable.
 - Don't hardcode timezone.
