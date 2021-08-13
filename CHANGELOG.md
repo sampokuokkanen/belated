@@ -1,6 +1,6 @@
 ## [Unreleased]
 
-## [0.5.1] - 2021-08-13
+## [0.5.2] - 2021-08-13
 
 - An error with shutdown handling was fixed.
 

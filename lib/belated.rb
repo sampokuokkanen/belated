@@ -91,13 +91,17 @@ class Belated
   def enqueue_future_jobs
     log 'starting future jobs thread'
     loop do
+      sleep 0.1
+      if @@queue.future_jobs.empty?
+        sleep 1
+        next
+      end
       @@queue.future_jobs.each_with_index do |job, i|
         if job.at <= Time.now.utc
           log "Deleting #{@@queue.future_jobs.delete_at(i)} from future jobs"
           @@queue.push(job)
         end
       end
-      sleep 0.01
     end
   end
 

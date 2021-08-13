@@ -52,7 +52,7 @@ RSpec.describe Belated::Client do
 
     it 'has a date option' do
       now = Time.now.utc
-      perform_at = now + 0.5
+      perform_at = now + 0.2
       @client.perform_belated(
         Belated::JobWrapper.new(
           job: proc { User.create!(name: 'Diana!') },
@@ -60,7 +60,7 @@ RSpec.describe Belated::Client do
         )
       )
       expect(User.find_by(name: 'Diana!')).to be_nil
-      sleep 1.63
+      sleep 0.35
       expect(User.find_by(name: 'Diana!')).to be_a User
     end
 
