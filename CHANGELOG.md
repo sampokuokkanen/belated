@@ -1,7 +1,10 @@
 ## [Unreleased]
 
+## [0.5.4] - 2021-08-14
 
-## [0.5.3] - 2021-08-14
+- Client was using 100% CPU when it had no connection. (on $5 Digital Ocean droplet) Should be fixed now. 
+
+## [0.5.3] - 2021-08-13
 
 - A bit less looping - better performance.
 ## [0.5.2] - 2021-08-13
