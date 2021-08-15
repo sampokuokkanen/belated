@@ -6,6 +6,11 @@ require 'belated/job_wrapper'
 require 'sorted_set'
 
 class Belated
+  # Job queues that Belated uses.
+  # queue is the jobs that are currenly
+  # waiting for a worker to start working on them.
+  # future_jobs is a SortedSet of jobs that are going
+  # to be added to queue at some point in the future.
   class Queue
     include Logging
     attr_accessor :future_jobs

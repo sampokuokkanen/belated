@@ -2,6 +2,14 @@ require 'securerandom'
 require_relative 'logging'
 
 class Belated
+  # JobWrapper is a wrapper for a job. It is responsible for
+  # - logging
+  # - error handling
+  # - job execution
+  # - job result handling
+  # - job result logging
+  # - job retries
+  # - job retry delay
   class JobWrapper
     include Comparable
     include Logging
@@ -15,8 +23,8 @@ class Belated
       self.at = at
     end
 
-    def <=>(another)
-      at <=> another.at
+    def <=>(other)
+      at <=> other.at
     end
 
     # rubocop:disable Lint/RescueException

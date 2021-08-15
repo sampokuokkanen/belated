@@ -1,4 +1,6 @@
 class Belated
+  # Logger for Belated.
+  # Include this module in your class to get a logger.
   module Logging
     extend self
 
