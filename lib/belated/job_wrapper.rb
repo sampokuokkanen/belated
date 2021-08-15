@@ -3,6 +3,7 @@ require_relative 'logging'
 
 class Belated
   class JobWrapper
+    include Comparable
     include Logging
     attr_accessor :retries, :max_retries, :id, :job, :at
 
@@ -12,6 +13,10 @@ class Belated
       self.id = SecureRandom.uuid
       self.job = job
       self.at = at
+    end
+
+    def <=>(another)
+      at <=> another.at
     end
 
     # rubocop:disable Lint/RescueException

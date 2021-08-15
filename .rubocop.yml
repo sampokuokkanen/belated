@@ -23,9 +23,6 @@ Style/AsciiComments:
 Style/ClassVars:
   Enabled: false
 
-Style/Documentation:
-  Enabled: false
-
 Style/GlobalVars:
   Enabled: false
 

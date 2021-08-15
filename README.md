@@ -16,9 +16,10 @@ Can be used with or without Rails.
 
 TODO LIST:
 
-- Rescue `DRb::DRbRemoteError`
+- Use GDBM for queeue storage? That way could maybe get rid of YAML dumping and make things a bit safer. 
+- Rescue `DRb::DRbRemoteError` when shutting down, might not need to if using GDBM?
 - Don't use class instance variables.
-- Make port configurable.
+- Make DRb port configurable.
 - Don't hardcode timezone.
 - Add some checks to the client for proper jobs.
 - Have multiple queues?
@@ -28,6 +29,7 @@ TODO LIST:
 - Do some performance testing.
 - Deploy a Rails app to production that is using Belated
   and mention it in the readme. (Capistrano support?)
+  ([Wasurechatta](wasurechatta.com))
 - Add a section telling people to use Sidekiq if they can
 
 ## Installation

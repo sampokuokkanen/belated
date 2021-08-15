@@ -16,7 +16,7 @@ class Belated
         log "Worker #{@number} fetching jobs!"
         next unless (job = Belated.fetch_job)
 
-        break if job == :shutdown
+        break if job.is_a?(Symbol)
 
         log "Worker #{@number} got job: #{job.inspect}"
         job.perform

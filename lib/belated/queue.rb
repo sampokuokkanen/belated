@@ -3,6 +3,8 @@
 require 'belated/job'
 require 'belated/logging'
 require 'belated/job_wrapper'
+require 'sorted_set'
+
 class Belated
   class Queue
     include Logging
@@ -10,13 +12,13 @@ class Belated
 
     FILE_NAME = 'belated_dump'
 
-    def initialize(queue: Thread::Queue.new, future_jobs: [])
+    def initialize(queue: Thread::Queue.new, future_jobs: SortedSet.new)
       @queue = queue
       self.future_jobs = future_jobs
     end
 
     def push(job)
-      if job == :shutdown || job.at.nil? ||
+      if job.is_a?(Symbol) || job.at.nil? ||
          job.at <= Time.now.utc
         @queue.push(job)
       else
@@ -79,7 +81,7 @@ class Belated
     private
 
     def proc_or_shutdown?(job)
-      job.job.instance_of?(Proc) || job == :shutdown
+      job.job.instance_of?(Proc) || job.is_a?(Symbol)
     end
   end
 end

@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
   spec.add_dependency 'drb'
   spec.add_dependency 'dry-configurable'
+  spec.add_dependency 'sorted_set'
   spec.add_development_dependency 'byebug'
 
   # For more information and examples about making a new gem, checkout our
