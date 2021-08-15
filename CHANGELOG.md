@@ -1,6 +1,11 @@
 ## [Unreleased]
 
-## [0.5.4] - 2021-08-14
+## [0.5.5] - 2021-08-15
+
+- Use SortedSet for future jobs, to avoid having to go through the whole list every few seconds. 
+
+
+## [0.5.4] - 2021-08-13
 
 - Client was using 100% CPU when it had no connection. (on $5 Digital Ocean droplet) Should be fixed now. 
 
