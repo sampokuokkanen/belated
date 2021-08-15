@@ -29,7 +29,7 @@ TODO LIST:
 - Do some performance testing.
 - Deploy a Rails app to production that is using Belated
   and mention it in the readme. (Capistrano support?)
-  ([Wasurechatta](wasurechatta.com))
+  ([Wasurechatta](https://wasurechatta.com/))
 - Add a section telling people to use Sidekiq if they can
 
 ## Installation
