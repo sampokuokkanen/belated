@@ -14,17 +14,6 @@ RSpec.describe Belated::Queue do
     expect(queue.future_jobs.to_a).to eq jobs.reverse
   end
 
-  it 'will rescue DRb::DRbRemoteError' do
-    expect {
-      @worker.job_list.push(
-        Belated::JobWrapper.new(
-          job: proc { raise DRb::DRbRemoteError }
-        )
-      )
-      sleep 0.01
-    }.not_to raise_error
-  end
-
   it 'logs the completed jobs' do
     # queue = Belated::Queue.new
   end

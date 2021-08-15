@@ -82,6 +82,17 @@ RSpec.describe Belated do
       }.not_to raise_error
     end
 
+    it 'will rescue DRb::DRbRemoteError' do
+      expect {
+        @worker.job_list.push(
+          Belated::JobWrapper.new(
+            job: proc { raise DRb::DRbRemoteError }
+          )
+        )
+        sleep 0.01
+      }.not_to raise_error
+    end
+
     it 'allows you to run code in the background' do
       @worker.job_list.push(
         Belated::JobWrapper.new(job: proc { puts 'hello' })
