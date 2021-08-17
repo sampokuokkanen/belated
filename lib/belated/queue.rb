@@ -86,7 +86,7 @@ class Belated
     private
 
     def proc_or_shutdown?(job)
-      job.job.instance_of?(Proc) || job.is_a?(Symbol)
+      job.is_a?(Symbol) || job.job.instance_of?(Proc)
     end
   end
 end

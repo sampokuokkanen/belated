@@ -19,7 +19,9 @@ class Belated
         break if job.is_a?(Symbol)
 
         log "Worker #{@number} got job: #{job.inspect}"
-        job.perform
+        log job.perform
+      rescue RangeError => e
+        log e
       end
     end
   end

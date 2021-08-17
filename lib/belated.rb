@@ -92,7 +92,7 @@ class Belated
     log 'starting future jobs thread'
     loop do
       sleep 0.1
-      job = @@queue.future_jobs.at(0)
+      job = @@queue.future_jobs.min
       if job.nil?
         sleep 5
         next

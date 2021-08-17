@@ -7,7 +7,7 @@ class Belated
   #   client = Belated::Client.new
   #   client.enqueue(JubJub.new, at: Time.now + 5.seconds)
   class Client
-    attr_accessor :queue, :bank, :banker_thread
+    attr_accessor :queue, :bank, :banker_thread, :table
 
     # Starts up the client.
     # Connects to the queue through DRb.
@@ -15,8 +15,10 @@ class Belated
     def initialize
       server_uri = Belated::URI
       DRb.start_service
+      self.table = {}
       self.bank = Thread::Queue.new
       self.queue = DRbObject.new_with_uri(server_uri)
+      start_banker_thread
     end
 
     # Thread in charge of handling the bank queue.
@@ -27,14 +29,18 @@ class Belated
       self.banker_thread = Thread.new do
         loop do
           sleep 0.01
-          unless drb_connected?
-            sleep(10)
-            next
+
+          unless table.empty?
+            table.select { |k, v| v.completed }.each do |key, value|
+              table.delete(key)
+            end
           end
 
-          job = bank.pop
-
-          perform(job)
+          if bank.empty?
+            sleep 10
+          else
+            perform(bank.pop)
+          end
         end
       end
     end
@@ -46,16 +52,19 @@ class Belated
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
+      if job.instance_of?(Proc) && !at.nil?
+        log "Passing a proc and at time is deprecated and will be removed in 0.6"
+      end
+
       job_wrapper = if job.is_a?(JobWrapper)
                       job
                     else
                       JobWrapper.new(job: job, at: at, max_retries: max_retries)
                     end
-      pp queue.push(job_wrapper)
-      job_wrapper
+      queue.push(job_wrapper)
+      table[job_wrapper.object_id] = job_wrapper
     rescue DRb::DRbConnError
       bank.push(job_wrapper)
-      start_banker_thread if banker_thread.nil?
     end
     alias perform_belated perform
     alias perform_later perform

@@ -68,8 +68,12 @@ RSpec.describe Belated::Client do
       expect(User.find_by(name: 'Diana!')).to be_a User
     end
 
-    it 'retries the jobs' do
-      'To be continued'
+    it 'keeps the jobs in a table, lets go once done' do
+      expect {
+        @client.perform(proc { 2 / 1})
+      }.to change { @client.table.length }.by(1)
+      sleep 0.1
+      expect(@client.table.length).to eq(0)
     end
   end
 end
