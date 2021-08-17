@@ -16,7 +16,7 @@ Can be used with or without Rails.
 
 TODO LIST:
 
-- Use GDBM for queeue storage? That way could maybe get rid of YAML dumping and make things a bit safer. 
+- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. 
 - Rescue `DRb::DRbRemoteError` when shutting down, might not need to if using GDBM?
 - Don't use class instance variables.
 - Make DRb port configurable.
@@ -104,7 +104,9 @@ If you don't want the job to run right away, you can also pass it a keyword para
 client.perform_belated(job, Time.now + 1.month)
 ```
 
-Note that you probably want to memoize the client, as it always creates a 'banker thread' now if you have no connection and there is the overhead of connecting to dRuby. Maybe even use it as a global!(`$client`)
+Note that you probably want to memoize the client, as it always creates a 'banker thread' and there is the overhead of connecting to dRuby. Maybe even use it as a global!(`$client`).
+
+The client also holds references to the jobs that have been pushed so that they are not collected by GC.
 
 # Settings
 

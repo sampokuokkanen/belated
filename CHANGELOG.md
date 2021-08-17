@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+
+## [0.5.6] - 2021-08-17
+
+- Now the client has a hash table that holds references to the objects you push through it. This is to get by GC, otherwise the objects are collected on clientside, but are still referenced on server side. This means that you do not want to use two instances of Client at the same time. Also, might need to write a way to close the client...
+- Should work a bit more safely now! Performance testing 0.5.5 online using a Rails project, it performed horribly, so it should be a bit better now. 
 ## [0.5.5] - 2021-08-15
 
 - Use SortedSet for future jobs, to avoid having to go through the whole list every few seconds. 
