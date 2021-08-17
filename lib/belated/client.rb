@@ -30,11 +30,7 @@ class Belated
         loop do
           sleep 0.01
 
-          unless table.empty?
-            table.select { |k, v| v.completed }.each do |key, value|
-              table.delete(key)
-            end
-          end
+          delete_from_table
 
           if bank.empty?
             sleep 10
@@ -45,6 +41,14 @@ class Belated
       end
     end
 
+    def delete_from_table
+      return if table.empty?
+
+      table.select { |_k, v| v.completed }.each do |key, _value|
+        table.delete(key)
+      end
+    end
+
     # The method that pushes the jobs to the queue.
     # If there is no connection, it pushes the job to the bank.
     # @param job [Object] - The the job to be pushed.
@@ -52,9 +56,7 @@ class Belated
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
-      if job.instance_of?(Proc) && !at.nil?
-        log "Passing a proc and at time is deprecated and will be removed in 0.6"
-      end
+      log 'Passing a proc and at time is deprecated and will be removed in 0.6' if job.instance_of?(Proc) && !at.nil?
 
       job_wrapper = if job.is_a?(JobWrapper)
                       job

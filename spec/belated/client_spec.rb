@@ -70,7 +70,7 @@ RSpec.describe Belated::Client do
 
     it 'keeps the jobs in a table, lets go once done' do
       expect {
-        @client.perform(proc { 2 / 1})
+        @client.perform(proc { 2 / 1 })
       }.to change { @client.table.length }.by(1)
       sleep 0.1
       expect(@client.table.length).to eq(0)

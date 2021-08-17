@@ -5,6 +5,9 @@ AllCops:
     - 'dummy/**/*'
     - 'vendor/**/*'
 
+Lint/HashCompareByIdentity:
+  Enabled: false
+
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: single_quotes

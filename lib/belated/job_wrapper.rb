@@ -50,9 +50,8 @@ class Belated
 
     def retry_job
       self.retries += 1
-      if retries > max_retries
-        return
-      end
+      return if retries > max_retries
+
       self.at = Time.now.utc + (retries.next**4)
       log "Job #{id} failed, retrying at #{at}"
       Belated.job_list.push(self)
