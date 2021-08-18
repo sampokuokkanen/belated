@@ -1,6 +1,8 @@
 ## [Unreleased]
 
+## [0.5.7] - 2021-08-18
 
+- Got errors under heavy load and restarting. Hopefully fixed by rescuing the DRb connection error.
 ## [0.5.6] - 2021-08-17
 
 - Now the client has a hash table that holds references to the objects you push through it. This is to get by GC, otherwise the objects are collected on clientside, but are still referenced on server side. This means that you do not want to use two instances of Client at the same time. Also, might need to write a way to close the client...
