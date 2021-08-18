@@ -65,9 +65,9 @@ class Belated
           @@queue.push(:shutdown)
         end
         Thread.new { stop_workers }
-        # Max 30 seconds to shutdown
+        # Max 40 seconds to shutdown
         timeout = 0
-        until (timeout += 0.1) >= 30 || @@queue.empty? || $TESTING
+        until (timeout += 0.1) >= 40 || @@queue.empty? || $TESTING
           sleep 0.1
         end
         exit
@@ -89,7 +89,6 @@ class Belated
   end
 
   def enqueue_future_jobs
-    log 'starting future jobs thread'
     loop do
       sleep 0.1
       job = @@queue.future_jobs.min
@@ -97,11 +96,13 @@ class Belated
         sleep 5
         next
       end
-
       if job.at <= Time.now.utc
         log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
         @@queue.push(job)
       end
+    rescue DRb::DRbConnError
+      log 'DRb connection error!!!!!!'
+      log stats
     end
   end
 
@@ -138,7 +139,7 @@ class Belated
 
   def banner_and_info
     log banner
-    log "Currently running Belated version #{Belated::VERSION}"
+    log "Currently running Belated version #{Belated::VERSION} in #{Belated.config.environment}"
     log %(Belated running #{@worker_list&.length.to_i} workers on #{URI}...)
   end
 

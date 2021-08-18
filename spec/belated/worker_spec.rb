@@ -21,4 +21,11 @@ RSpec.describe Belated::Worker do
     sleep 0.01
     expect(@client.queue.length).to eq 0
   end
+
+  it 'does not fail if the object is garbage collected' do
+    @client.perform_belated(proc { raise Errno::ECONNREFUSED })
+    @client.perform_belated(proc { 4 / 2 })
+    sleep 0.01
+    expect(@client.queue.length).to eq 0
+  end
 end

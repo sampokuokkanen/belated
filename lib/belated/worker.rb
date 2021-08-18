@@ -20,7 +20,7 @@ class Belated
 
         log "Worker #{@number} got job: #{job.inspect}"
         log job.perform
-      rescue RangeError => e
+      rescue Errno::ECONNREFUSED, RangeError => e
         log e
       end
     end
