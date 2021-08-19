@@ -14,15 +14,15 @@ Note that currently the timezone is hardcoded to UTC.
 
 Can be used with or without Rails. 
 
+Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. Not if you're on a Heroku or Docker, or anything with ephemeral storage. 
+
 TODO LIST:
 
-- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. 
-- Rescue `DRb::DRbRemoteError` when shutting down, might not need to if using GDBM?
-- Don't use class instance variables.
+- Improve thread safety. 
+- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? 
 - Make DRb port configurable.
-- Don't hardcode timezone.
+- Don't hardcode timezone to UTC.
 - Add some checks to the client for proper jobs.
-- Have multiple queues?
 - Maybe support ActiveJob?
 - Have a web UI.
 - Have a job history
