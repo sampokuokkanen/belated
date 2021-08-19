@@ -1,8 +1,9 @@
 ## [Unreleased]
 
-## [0.5.8] - 2021-08-19
+## [0.6.0] - 2021-08-19
 
 - Only need to keep references on the client side for procs. Not needed for classes, as they are pass-by-value. However, you can only pass procs by reference, so need to keep track of them. They're removed from the client side when they're completed though. 
+- The client is now a singleton. This is because it had some overhead when pushing the jobs to dRuby, so I took the approach of also doing that in a background thread. You however do not want more than one client to be running at the same time, so making it a singleton is the best option. Call the `.instance` method to get the singleton and then `.start` to get it started. 
 
 ## [0.5.7] - 2021-08-18
 
