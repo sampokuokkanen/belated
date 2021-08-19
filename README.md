@@ -85,10 +85,17 @@ First, start up Belated.
 Then,
 
 ```ruby
-client = Belated::Client.new
+# Get the client
+client = Belated::Client.instance
+# Start the client, only need to do this once
+client.start unless client.started?
 ```
 
 and you can use the client!
+Note that the client is a singleton. 
+This means that you can only have one client running at a time, 
+but it also means you only have one connection to dRuby, and that the number of threads in charge of queuing the jobs is only one.
+
 Call
 
 ```ruby
@@ -104,9 +111,7 @@ If you don't want the job to run right away, you can also pass it a keyword para
 client.perform_belated(job, Time.now + 1.month)
 ```
 
-Note that you probably want to memoize the client, as it always creates a 'banker thread' and there is the overhead of connecting to dRuby. Maybe even use it as a global!(`$client`).
-
-The client also holds references to the jobs that have been pushed so that they are not collected by GC.
+The client also holds references to the jobs that are instances of `Proc` that have been pushed so that they are not collected by GC. This is because procs are passed by reference, and the client needs to keep them alive. They are removed from the list when the job is done.
 
 # Settings
 

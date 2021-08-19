@@ -6,6 +6,7 @@ RSpec.describe Belated::Client do
   describe 'client can recover from not having connection' do
     it 'does not raise an error if there is no connection' do
       client = Belated::Client.new
+      expect(client.started?).to be_truthy
       expect {
         client.perform_belated(proc { 2 / 1 })
       }.not_to raise_error
@@ -50,7 +51,7 @@ RSpec.describe Belated::Client do
     it 'adds a job to the queue' do
       expect {
         @client.perform_belated(proc { User.create!(name: 'Diana') })
-        sleep 0.06
+        sleep 0.07
       }.to change { User.all.count }.by(1)
     end
 
@@ -71,9 +72,15 @@ RSpec.describe Belated::Client do
     it 'keeps the jobs in a table, lets go once done' do
       expect {
         @client.perform(proc { 2 / 1 })
-      }.to change { @client.table.length }.by(1)
+      }.to change { @client.proc_table.length }.by(1)
       sleep 0.1
-      expect(@client.table.length).to eq(0)
+      expect(@client.proc_table.length).to eq(0)
+    end
+
+    it 'keeps the jobs in a table only if they are procs' do
+      expect {
+        @client.perform(DumDum.new)
+      }.to change { @client.proc_table.length }.by(0)
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'belated/job_wrapper'
+require 'singleton'
 class Belated
   # The client class is responsible for managing the connection to the
   # DRb server. If it has no connection, it adds the jobs to a bank queue.
@@ -7,18 +8,25 @@ class Belated
   #   client = Belated::Client.new
   #   client.enqueue(JubJub.new, at: Time.now + 5.seconds)
   class Client
-    attr_accessor :queue, :bank, :banker_thread, :table
+    include Singleton unless $TESTING
+
+    attr_accessor :queue, :bank, :banker_thread, :proc_table
 
     # Starts up the client.
     # Connects to the queue through DRb.
     # @return [void]
-    def initialize
+    def start
       server_uri = Belated::URI
       DRb.start_service
-      self.table = {}
+      self.proc_table = {}
       self.bank = Thread::Queue.new
       self.queue = DRbObject.new_with_uri(server_uri)
-      start_banker_thread
+      @started = true
+    end
+    alias initialize start
+
+    def started?
+      @started
     end
 
     # Thread in charge of handling the bank queue.
@@ -28,24 +36,25 @@ class Belated
     def start_banker_thread
       self.banker_thread = Thread.new do
         loop do
-          sleep 0.01
-
           delete_from_table
-
           if bank.empty?
             sleep 10
-          else
-            perform(bank.pop)
+            next
+          end
+          begin
+            queue.push(wrapper = bank.pop)
+          rescue DRb::DRbConnError
+            bank.push(wrapper)
           end
         end
       end
     end
 
     def delete_from_table
-      return if table.empty?
+      return if proc_table.empty?
 
-      table.select { |_k, v| v.completed }.each do |key, _value|
-        table.delete(key)
+      proc_table.select { |_k, v| v.completed }.each do |key, _value|
+        proc_table.delete(key)
       end
     end
 
@@ -63,10 +72,10 @@ class Belated
                     else
                       JobWrapper.new(job: job, at: at, max_retries: max_retries)
                     end
-      queue.push(job_wrapper)
-      table[job_wrapper.object_id] = job_wrapper
-    rescue DRb::DRbConnError
       bank.push(job_wrapper)
+      proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass
+      start_banker_thread if banker_thread.nil?
+      job_wrapper
     end
     alias perform_belated perform
     alias perform_later perform

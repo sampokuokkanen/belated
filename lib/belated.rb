@@ -113,7 +113,8 @@ class Belated
 
   def stop_workers
     @worker_list&.each do |worker|
-      sleep 0.1 if worker.alive?
+      i = 0
+      sleep 0.1 while worker.alive? || (i + 0.1) < 10
       Thread.kill(worker)
     end
     @@queue.save_jobs

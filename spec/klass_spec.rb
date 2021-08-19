@@ -11,7 +11,7 @@ RSpec.describe Belated do
         Belated::JobWrapper.new(job: DumDum.new)
       )
     end
-    sleep 0.1
+    sleep 0.05
     expect(worker.job_list.length).to eq 0
   end
 end

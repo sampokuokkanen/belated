@@ -13,7 +13,7 @@ class Belated
   class JobWrapper
     include Comparable
     include Logging
-    attr_accessor :retries, :max_retries, :id, :job, :at, :completed
+    attr_accessor :retries, :max_retries, :id, :job, :at, :completed, :proc_klass
 
     def initialize(job:, max_retries: 5, at: nil)
       self.retries = 0
@@ -22,6 +22,7 @@ class Belated
       self.job = job
       self.at = at
       self.completed = false
+      self.proc_klass = job.instance_of?(Proc)
     end
 
     def <=>(other)

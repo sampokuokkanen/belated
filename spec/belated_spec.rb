@@ -33,7 +33,7 @@ RSpec.describe Belated do
       end
 
       it 'remembers the jobs it has enqued even if restarted' do
-        8.times do
+        9.times do
           @worker.job_list.push(
             Belated::JobWrapper.new(
               job: DumDum.new(sleep: 10)
