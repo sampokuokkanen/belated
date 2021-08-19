@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.5.8] - 2021-08-19
+
+- Only need to keep references on the client side for procs. Not needed for classes, as they are pass-by-value. However, you can only pass procs by reference, so need to keep track of them. They're removed from the client side when they're completed though. 
+
 ## [0.5.7] - 2021-08-18
 
 - Got errors under heavy load and restarting. Hopefully fixed by rescuing the DRb connection error.
