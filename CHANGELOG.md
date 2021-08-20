@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.6.1] - 2021-08-20
+
+When the client closes and worker has a reference to a proc, a `DRb::ConnError` is raised. Rescueing it and ignoring it.
 ## [0.6.0] - 2021-08-19
 
 - Only need to keep references on the client side for procs. Not needed for classes, as they are pass-by-value. However, you can only pass procs by reference, so need to keep track of them. They're removed from the client side when they're completed though. 
