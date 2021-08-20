@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.6.2] - 2021-08-20
+
+- Use a mutex for the proc_table used by the client. Fixes
+`RuntimeError: can't add a new key into hash during iteration (Most recent call first)`, so starting improving thread safety with this fix. 
+
 ## [0.6.1] - 2021-08-20
 
 When the client closes and worker has a reference to a proc, a `DRb::ConnError` is raised. Rescueing it and ignoring it.

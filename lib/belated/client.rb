@@ -22,6 +22,7 @@ class Belated
       self.bank = Thread::Queue.new
       self.queue = DRbObject.new_with_uri(server_uri)
       @started = true
+      @mutex = Mutex.new
     end
     alias initialize start
 
@@ -54,7 +55,9 @@ class Belated
       return if proc_table.empty?
 
       proc_table.select { |_k, v| v.completed }.each do |key, _value|
-        proc_table.delete(key)
+        @mutex.synchronize do
+          proc_table.delete(key)
+        end
       end
     end
 
@@ -65,15 +68,11 @@ class Belated
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
-      log 'Passing a proc and at time is deprecated and will be removed in 0.6' if job.instance_of?(Proc) && !at.nil?
-
-      job_wrapper = if job.is_a?(JobWrapper)
-                      job
-                    else
-                      JobWrapper.new(job: job, at: at, max_retries: max_retries)
-                    end
+      job_wrapper = wrap_job(job, at: at, max_retries: max_retries)
       bank.push(job_wrapper)
-      proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass
+      @mutex.synchronize do
+        proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass
+      end
       start_banker_thread if banker_thread.nil?
       job_wrapper
     end
@@ -81,6 +80,12 @@ class Belated
     alias perform_later perform
 
     private
+
+    def wrap_job(job, at:, max_retries:)
+      return job if job.is_a?(JobWrapper)
+
+      JobWrapper.new(job: job, at: at, max_retries: max_retries)
+    end
 
     def drb_connected?
       queue.connected?
