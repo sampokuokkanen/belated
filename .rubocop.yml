@@ -37,6 +37,9 @@ Style/BlockDelimiters:
 Style/ModuleFunction:
   EnforcedStyle: extend_self
 
+Metrics/AbcSize:
+  Max: 17
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'

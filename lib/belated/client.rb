@@ -35,13 +35,11 @@ class Belated
     # having many threads in the sleep state.
     # @return [void]
     def start_banker_thread
-      self.banker_thread = Thread.new do
+      Thread.new do
         loop do
-          delete_from_table if proc_table.length > 20
-          if bank.empty?
-            sleep 10
-            next
-          end
+          delete_from_table
+          sleep 10 and next if bank.empty?
+
           until bank.empty?
             begin
               queue.push(wrapper = bank.pop)
@@ -55,7 +53,7 @@ class Belated
     end
 
     def delete_from_table
-      return if proc_table.empty?
+      return if proc_table.length < 20
 
       @mutex.synchronize do
         proc_table.select { |_k, v| v.completed }.each do |key, _value|
@@ -76,7 +74,7 @@ class Belated
       @mutex.synchronize do
         proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass
       end
-      start_banker_thread if banker_thread.nil?
+      self.banker_thread = start_banker_thread if banker_thread.nil?
       job_wrapper
     end
     alias perform_belated perform
