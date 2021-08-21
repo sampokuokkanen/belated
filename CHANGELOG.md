@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.6.3] - 2021-08-21
+
+- Needed to have the hash inside the mutex when going over it; otherwise you still the get can't add key into hash during iteration error. Of course.
+
 ## [0.6.2] - 2021-08-20
 
 - Use a mutex for the proc_table used by the client. Fixes
