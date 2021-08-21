@@ -37,15 +37,18 @@ class Belated
     def start_banker_thread
       self.banker_thread = Thread.new do
         loop do
-          delete_from_table
+          delete_from_table if proc_table.length > 20
           if bank.empty?
             sleep 10
             next
           end
-          begin
-            queue.push(wrapper = bank.pop)
-          rescue DRb::DRbConnError
-            bank.push(wrapper)
+          until bank.empty?
+            begin
+              queue.push(wrapper = bank.pop)
+            rescue DRb::DRbConnError
+              bank.push(wrapper)
+              sleep 5
+            end
           end
         end
       end
@@ -54,8 +57,8 @@ class Belated
     def delete_from_table
       return if proc_table.empty?
 
-      proc_table.select { |_k, v| v.completed }.each do |key, _value|
-        @mutex.synchronize do
+      @mutex.synchronize do
+        proc_table.select { |_k, v| v.completed }.each do |key, _value|
           proc_table.delete(key)
         end
       end
