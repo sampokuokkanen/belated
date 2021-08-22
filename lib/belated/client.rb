@@ -33,7 +33,7 @@ class Belated
     end
 
     def turn_off
-      self.banker_thread.kill unless banker_thread.nil?
+      banker_thread&.kill
     end
 
     # Thread in charge of handling the bank queue.
