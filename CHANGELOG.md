@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+## [0.6.4] - 2021-08-22
+- Inline jobs for testing!
+```ruby
+`belated/testing`
+Belated::Testing.inline!
+```
+- Very much inspired by how Sidekiq is doing this. 
+- Read more in the testing part of README.md
+
 ## [0.6.3] - 2021-08-21
 
 - Needed to have the hash inside the mutex when going over it; otherwise you still the get can't add key into hash during iteration error. Of course.

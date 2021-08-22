@@ -32,7 +32,9 @@ class Belated
       @started
     end
 
+    # Makes it possible to reset the client
     def turn_off
+      @started = false
       banker_thread&.kill
     end
 
