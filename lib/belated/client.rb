@@ -16,6 +16,8 @@ class Belated
     # Connects to the queue through DRb.
     # @return [void]
     def start
+      return if started?
+
       server_uri = Belated::URI
       DRb.start_service
       self.proc_table = {}
@@ -69,6 +71,8 @@ class Belated
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
+      log 'Call .start on the client instance first!' unless started?
+
       job_wrapper = wrap_job(job, at: at, max_retries: max_retries)
       bank.push(job_wrapper)
       @mutex.synchronize do

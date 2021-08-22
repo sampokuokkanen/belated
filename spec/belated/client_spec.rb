@@ -79,6 +79,13 @@ RSpec.describe Belated::Client do
       expect(@client.proc_table.length).to eq(0)
     end
 
+    it 'will not reset the table if start is called multiple times' do
+      expect {
+        @client.perform(proc { 2 / 1 })
+        @client.start
+      }.to change { @client.proc_table.length }.by(1)
+    end
+
     it 'keeps the jobs in a table only if they are procs' do
       expect {
         @client.perform(DumDum.new)
