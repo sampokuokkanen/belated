@@ -75,7 +75,7 @@ RSpec.describe Belated::Client do
           @client.perform(proc { 2 / 1 })
         end
       }.to change { @client.proc_table.length }.by(21)
-      sleep 0.1
+      sleep 0.15
       expect(@client.proc_table.length).to eq(0)
     end
 

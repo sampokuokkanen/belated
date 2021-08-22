@@ -18,8 +18,8 @@ Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. No
 
 TODO LIST:
 
-- Improve thread safety. 
-- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? 
+- Improve testing experience on Rails when using Belated
+- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? Would need to be configurable if you don't have something installed.
 - Make DRb port configurable.
 - Don't hardcode timezone to UTC.
 - Add some checks to the client for proper jobs.

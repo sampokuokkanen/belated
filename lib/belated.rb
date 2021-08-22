@@ -29,7 +29,7 @@ class Belated
   setting :rails_path, '.'
   setting :workers, 1
   setting :connect, true
-  setting :environment, 'development'
+  setting :environment, 'development', reader: true
   setting :logger, Logger.new($stdout), reader: true
   setting :log_level, :info, reader: true
 
