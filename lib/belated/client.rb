@@ -32,6 +32,10 @@ class Belated
       @started
     end
 
+    def turn_off
+      self.banker_thread.kill unless banker_thread.nil?
+    end
+
     # Thread in charge of handling the bank queue.
     # You probably want to memoize the client in order to avoid
     # having many threads in the sleep state.
@@ -55,7 +59,7 @@ class Belated
     end
 
     def delete_from_table
-      return if proc_table.length < 20
+      return if proc_table.length < 25
 
       @mutex.synchronize do
         proc_table.select { |_k, v| v.completed }.each do |key, _value|

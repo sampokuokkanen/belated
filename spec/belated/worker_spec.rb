@@ -12,6 +12,7 @@ RSpec.describe Belated::Worker do
 
   after do
     @worker.kill
+    @client.turn_off
   end
 
   it 'does not stop processing jobs if there is a crash' do

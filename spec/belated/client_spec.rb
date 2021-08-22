@@ -41,6 +41,7 @@ RSpec.describe Belated::Client do
     end
 
     after do
+      @client.turn_off
       @worker.kill
     end
 
@@ -71,10 +72,10 @@ RSpec.describe Belated::Client do
 
     it 'keeps the jobs in a table, lets go once done' do
       expect {
-        21.times do
+        26.times do
           @client.perform(proc { 2 / 1 })
         end
-      }.to change { @client.proc_table.length }.by(21)
+      }.to change { @client.proc_table.length }.by(26)
       sleep 0.15
       expect(@client.proc_table.length).to eq(0)
     end
