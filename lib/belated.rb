@@ -23,7 +23,7 @@ class Belated
   include Logging
   include Singleton unless $TESTING
   @@queue = Belated::Queue.new
-  
+
   setting :rails, true
   setting :rails_path, '.'
   setting :workers, 1
@@ -34,7 +34,7 @@ class Belated
   setting :host, 'localhost', reader: true
   setting :port, '8788', reader: true
   URI = "druby://#{Belated.host}:#{Belated.port}"
-  
+
   # Since it's running as a singleton, we need something to start it up.
   # Aliased for testing purposes.
   # This is only run from the bin file.

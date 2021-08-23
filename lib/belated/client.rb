@@ -99,7 +99,6 @@ class Belated
       raise JobError, 'job does not implement .call nor .perform!'
     end
 
-
     def wrap_job(job, at:, max_retries:)
       return job if job.is_a?(JobWrapper)
 
