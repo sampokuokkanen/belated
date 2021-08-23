@@ -1,4 +1,5 @@
 require 'belated/job_wrapper'
+require 'belated/exceptions'
 require 'singleton'
 class Belated
   # The client class is responsible for managing the connection to the
@@ -77,8 +78,8 @@ class Belated
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
-      log 'Call .start on the client instance first!' unless started?
-
+      start unless started?
+      check_if_proper_job!(job)
       job_wrapper = wrap_job(job, at: at, max_retries: max_retries)
       bank.push(job_wrapper)
       @mutex.synchronize do
@@ -91,6 +92,13 @@ class Belated
     alias perform_later perform
 
     private
+
+    def check_if_proper_job!(job)
+      return if job.respond_to?(:call) || job.respond_to?(:perform)
+
+      raise JobError, 'job does not implement .call nor .perform!'
+    end
+
 
     def wrap_job(job, at:, max_retries:)
       return job if job.is_a?(JobWrapper)

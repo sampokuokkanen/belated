@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [0.6.5] - 2021-08-23
+
+- Timezone used inside Belated is all using the server time now, so it's up to the user to take care of that(using `Time.now` instead of `Time.now.utc`)
+- Possible to configure host and port.
+- No need to call `.start` on the client anymore. 
+- Logging some error and warn messages now too, instead of it all being info
+
 ## [0.6.4] - 2021-08-22
 - Inline jobs for testing!
 ```ruby

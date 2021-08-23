@@ -28,8 +28,16 @@ OptionParser.new { |opts|
     Belated.config.env = env
   end
 
-  opts.on('-c=CONNECT', '--connect=CONNECT', 'Start dRuby connection, default true') do |connect|
+  opts.on('-c=CONNECT', '--connect=CONNECT', 'Start dRuby connection, default true, use for testing only') do |connect|
     Belated.config.connect = connect == 'true'
+  end
+
+  opts.on('-h=HOST', '--host=HOST', 'dRuby host') do |host|
+    Belated.config.host = host
+  end
+
+  opts.on('-p=PORT', '--port=PORT', 'dRuby port') do |port|
+    Belated.config.port = port
   end
 }.parse!
 

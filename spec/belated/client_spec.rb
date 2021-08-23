@@ -56,8 +56,14 @@ RSpec.describe Belated::Client do
       }.to change { User.all.count }.by(1)
     end
 
+    it 'does not accept something that is not a proper job' do
+      expect {
+        @client.perform_belated('Hello World!')
+      }.to raise_error
+    end
+
     it 'has a date option' do
-      now = Time.now.utc
+      now = Time.now
       perform_at = now + 0.3
       @client.perform_belated(
         Belated::JobWrapper.new(

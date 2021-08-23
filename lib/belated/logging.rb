@@ -12,6 +12,14 @@ class Belated
       logger.__send__(Belated.log_level, message)
     end
 
+    def warn(message)
+      logger.warn(message)
+    end
+
+    def error(message)
+      logger.error(message)
+    end
+
     def logger=(logger)
       @logger = logger
     end

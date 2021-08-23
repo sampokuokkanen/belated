@@ -19,9 +19,6 @@ Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. No
 TODO LIST:
 
 - Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? Would need to be configurable if you don't have something installed.
-- Make DRb port configurable.
-- Don't hardcode timezone to UTC.
-- Add some checks to the client for proper jobs.
 - Maybe support ActiveJob?
 - Have a web UI.
 - Have a job history
@@ -86,8 +83,6 @@ Then,
 ```ruby
 # Get the client
 client = Belated::Client.instance
-# Start the client, only need to do this once
-client.start unless client.started?
 ```
 
 and you can use the client!
@@ -137,6 +132,14 @@ Path to Rails project.
 
     $ bundle exec belated --workers=10
 
+Other available settings:
+
+    $ bundle exec belated --host=1.1.1.1 --port=1234 
+    # druby://1.1.1.1:1234
+    $ bundle exec belated --env 
+    # environment
+
+
 Number of workers.
 
 ## Testing
@@ -146,7 +149,6 @@ When testing, you can require `belated/testing` and then call `Belated::Testing.
 ```ruby
 `belated/testing`
 c = Belated::Client.instance
-c.start
 c.perform(proc { 2/ 1}) # Tries to push the job to the drb backend
 # <Belated::JobWrapper:0x00005654bc2db1f0 @at=nil, @completed=false, @id="95e4dc6a-1876-4adf-ae0f-5ae902f5f024", @job=#<Proc:0x00005654bc2db330 (irb):3>, @max_retries=5, @proc_klass=true, @retries=0>
 Belated::Testing.inline! # Sidekiq-inspired, now jobs run inline

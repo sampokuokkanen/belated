@@ -22,9 +22,8 @@ class Belated
   extend Dry::Configurable
   include Logging
   include Singleton unless $TESTING
-  URI = 'druby://localhost:8788'
   @@queue = Belated::Queue.new
-
+  
   setting :rails, true
   setting :rails_path, '.'
   setting :workers, 1
@@ -32,7 +31,10 @@ class Belated
   setting :environment, 'development', reader: true
   setting :logger, Logger.new($stdout), reader: true
   setting :log_level, :info, reader: true
-
+  setting :host, 'localhost', reader: true
+  setting :port, '8788', reader: true
+  URI = "druby://#{Belated.host}:#{Belated.port}"
+  
   # Since it's running as a singleton, we need something to start it up.
   # Aliased for testing purposes.
   # This is only run from the bin file.
@@ -55,7 +57,7 @@ class Belated
   def connect!
     DRb.start_service(URI, @@queue, verbose: true)
   rescue DRb::DRbConnError, Errno::EADDRINUSE
-    Belated.logger.error 'Could not connect to DRb server.'
+    error 'Could not connect to DRb server.'
   end
 
   def trap_signals
@@ -96,12 +98,12 @@ class Belated
         sleep 5
         next
       end
-      if job.at <= Time.now.utc
+      if job.at <= Time.now
         log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
         @@queue.push(job)
       end
     rescue DRb::DRbConnError
-      log 'DRb connection error!!!!!!'
+      error 'DRb connection error!!!!!!'
       log stats
     end
   end
@@ -173,8 +175,6 @@ class Belated
   def self.job_list
     @@queue
   end
-
-  class Error < StandardError; end
 end
 
 require 'belated/rails' if defined?(::Rails::Engine)
