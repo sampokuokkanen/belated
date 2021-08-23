@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.6.4)
+    belated (0.6.5)
       drb
       dry-configurable
       sorted_set
