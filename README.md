@@ -10,8 +10,6 @@ Note that Belated used to be called HardWorker. That name was already in use in 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.
 
-Note that currently the timezone is hardcoded to UTC. 
-
 Can be used with or without Rails. 
 
 Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. Not if you're on a Heroku or Docker, or anything with ephemeral storage. 
