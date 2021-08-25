@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.6.7] - 2021-08-25
+
+- A bug fix for bad jobs bringing down client side. 
+- Heartbeat option for server side. It only affects jobs in the wait list, it's used to determine how often to check the future jobs queue. 
 ## [0.6.6] - 2021-08-25
 
 - Tests now run agains Ruby 2.6, so relaxing the version constraint. 
