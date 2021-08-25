@@ -25,7 +25,7 @@ RSpec.describe Belated::Client do
         config.port = '8786'
       end
       @worker = Thread.new { Belated.new }
-      sleep 0.14
+      sleep 0.2
       expect(client.bank.length).to eq(0)
       @worker.kill
     end
