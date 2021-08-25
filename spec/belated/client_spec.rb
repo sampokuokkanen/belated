@@ -23,7 +23,7 @@ RSpec.describe Belated::Client do
         config.connect = true
       end
       @worker = Thread.new { Belated.new }
-      sleep 0.12
+      sleep 0.14
       expect(client.bank.length).to eq(0)
       @worker.kill
     end
