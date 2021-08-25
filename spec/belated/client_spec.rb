@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Belated::Client do
   describe 'client can recover from not having connection' do
     it 'does not raise an error if there is no connection' do
+      Belated.config.port = '8785'
       client = Belated::Client.new
       expect(client.started?).to be_truthy
       expect {
@@ -21,6 +22,7 @@ RSpec.describe Belated::Client do
         config.rails = false
         config.workers = 1
         config.connect = true
+        config.port = '8786'
       end
       @worker = Thread.new { Belated.new }
       sleep 0.14
