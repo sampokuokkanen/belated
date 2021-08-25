@@ -26,7 +26,7 @@ RSpec.describe Belated do
       )
     }.to change { User.where(name: 'David').count }.by(0)
     expect {
-      sleep 0.16
+      sleep 0.18
     }.to change { User.where(name: 'David').count }.by(1)
   end
 end
