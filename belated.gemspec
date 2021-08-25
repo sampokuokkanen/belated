@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'drb'
   spec.add_dependency 'dry-configurable'
   spec.add_dependency 'sorted_set'
+  spec.add_dependency 'ruby2_keywords'
   spec.add_development_dependency 'byebug'
 
   # For more information and examples about making a new gem, checkout our

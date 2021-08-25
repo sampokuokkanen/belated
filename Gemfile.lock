@@ -4,6 +4,7 @@ PATH
     belated (0.6.5)
       drb
       dry-configurable
+      ruby2_keywords
       sorted_set
 
 GEM
@@ -178,6 +179,7 @@ GEM
       rubocop (~> 1.0)
       rubocop-ast (>= 1.1.0)
     ruby-progressbar (1.11.0)
+    ruby2_keywords (0.0.5)
     set (1.0.1)
     sorted_set (1.0.3)
       rbtree
