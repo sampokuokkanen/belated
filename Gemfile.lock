@@ -192,7 +192,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
-    stackprof (0.2.16)
     thor (1.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -216,7 +215,6 @@ DEPENDENCIES
   rubocop (~> 1.7)
   rubocop-discourse
   sqlite3
-  stackprof
 
 BUNDLED WITH
    2.2.22
