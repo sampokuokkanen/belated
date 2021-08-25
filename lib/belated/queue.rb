@@ -19,6 +19,7 @@ class Belated
 
     def initialize(queue: Thread::Queue.new, future_jobs: SortedSet.new)
       @queue = queue
+      @mutex = Mutex.new
       self.future_jobs = future_jobs
     end
 
@@ -27,7 +28,9 @@ class Belated
          job.at <= Time.now.utc
         @queue.push(job)
       else
-        @future_jobs << job
+        @mutex.synchronize do
+          @future_jobs << job
+        end
       end
     end
 

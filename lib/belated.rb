@@ -33,6 +33,7 @@ class Belated
   setting :log_level, :info, reader: true
   setting :host, 'localhost', reader: true
   setting :port, '8788', reader: true
+  setting :heartbeat, 1, reader: true
   setting :client_heartbeat, 5, reader: true
   URI = "druby://#{Belated.host}:#{Belated.port}"
 
@@ -56,8 +57,10 @@ class Belated
 
   # Handles connection to DRb server.
   def connect!
+    i = 0
     DRb.start_service(URI, @@queue, verbose: true)
   rescue DRb::DRbConnError, Errno::EADDRINUSE
+    sleep 0.1 and retry if (i += 1) < 5
     error 'Could not connect to DRb server.'
   end
 
@@ -93,10 +96,9 @@ class Belated
 
   def enqueue_future_jobs
     loop do
-      sleep 0.1
       job = @@queue.future_jobs.min
       if job.nil?
-        sleep 5
+        sleep Belated.heartbeat
         next
       end
       if job.at <= Time.now

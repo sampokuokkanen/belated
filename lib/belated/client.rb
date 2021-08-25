@@ -76,7 +76,8 @@ class Belated
     # @return [JobWrapper] - The job wrapper for the queue.
     def perform(job, at: nil, max_retries: 5)
       start unless started?
-      check_if_proper_job!(job)
+      return unless proper_job?(job)
+
       job_wrapper = wrap_job(job, at: at, max_retries: max_retries)
       bank.push(job_wrapper)
       @mutex.synchronize do
@@ -90,10 +91,11 @@ class Belated
 
     private
 
-    def check_if_proper_job!(job)
-      return if job.respond_to?(:call) || job.respond_to?(:perform)
+    def proper_job?(job)
+      return true if job.respond_to?(:call) || job.respond_to?(:perform)
 
-      raise JobError, 'job does not implement .call nor .perform!'
+      warn 'job does not implement .call nor .perform!'
+      false
     end
 
     def wrap_job(job, at:, max_retries:)
