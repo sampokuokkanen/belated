@@ -36,7 +36,6 @@ RSpec.describe Belated::Client do
   end
 
   describe 'adding jobs' do
-
     it 'is connected' do
       expect(@client.queue.connected?).to eq(true)
     end
