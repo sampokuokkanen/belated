@@ -71,8 +71,8 @@ RSpec.describe Belated::Client do
           @client.perform(proc { 2 / 1 })
         end
       }.to change { @client.proc_table.length }.by(26)
-      sleep 0.55
-      expect(@client.proc_table.length).to eq(0)
+      sleep 0.2
+      expect(@client.proc_table.length).to be_between(0, 2)
     end
 
     it 'will not reset the table if start is called multiple times' do
