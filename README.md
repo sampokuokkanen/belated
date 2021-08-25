@@ -134,8 +134,10 @@ Other available settings:
 
     $ bundle exec belated --host=1.1.1.1 --port=1234 
     # druby://1.1.1.1:1234
-    $ bundle exec belated --env 
+    $ bundle exec belated --env=test
     # environment
+    $ bundle exec belated --client_heartbeat=10
+    # how often client sends jobs to server, default is once every 5 seconds
 
 
 Number of workers.

@@ -47,15 +47,12 @@ class Belated
       Thread.new do
         loop do
           delete_from_table
-          sleep 0.1 and next if bank.empty?
+          sleep Belated.client_heartbeat and next if bank.empty?
 
-          until bank.empty?
-            begin
-              queue.push(wrapper = bank.pop)
-            rescue DRb::DRbConnError
-              bank.push(wrapper)
-              sleep 0.1
-            end
+          bank.length.times do
+            queue.push(wrapper = bank.pop)
+          rescue DRb::DRbConnError
+            bank.push(wrapper)
           end
         end
       end

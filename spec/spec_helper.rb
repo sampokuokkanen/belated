@@ -6,6 +6,7 @@ require 'belated'
 require 'byebug'
 Belated.config.rails_path = './dummy'
 Belated.config.workers = 0
+Belated.config.client_heartbeat = 0.1
 Thread.abort_on_exception = true
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

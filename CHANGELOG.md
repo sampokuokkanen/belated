@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.6.6] - 2021-08-25
+
+- Tests now run agains Ruby 2.6, so relaxing the version constraint. 
+- Add client_heartbeat option, so you can define how often you want jobs sent to the Belated server. 
 ## [0.6.5] - 2021-08-23
 
 - Timezone used inside Belated is all using the server time now, so it's up to the user to take care of that(using `Time.now` instead of `Time.now.utc`)

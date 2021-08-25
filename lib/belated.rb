@@ -33,6 +33,7 @@ class Belated
   setting :log_level, :info, reader: true
   setting :host, 'localhost', reader: true
   setting :port, '8788', reader: true
+  setting :client_heartbeat, 5, reader: true
   URI = "druby://#{Belated.host}:#{Belated.port}"
 
   # Since it's running as a singleton, we need something to start it up.
