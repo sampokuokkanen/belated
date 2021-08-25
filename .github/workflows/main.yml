@@ -14,6 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
+      run: sudo apt-get -yqq install libxml2-dev libxslt-dev
+      if: startsWith(matrix.ruby, 'truffleruby')
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
