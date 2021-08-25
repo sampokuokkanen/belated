@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 $TESTING = true
+require 'ruby2_keywords'
 require 'belated'
 require 'byebug'
 Belated.config.rails_path = './dummy'
