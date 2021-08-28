@@ -16,7 +16,7 @@ RSpec.describe Belated::Worker do
   end
 
   it 'does not stop processing jobs if there is a crash' do
-    @client.perform_belated(proc { 2 / 0 })
+    @client.perform_belated(proc { 2 / 0 }, max_retries: 0)
     sleep 0.01
     @client.perform_belated(proc { 4 / 2 })
     sleep 0.01
@@ -24,7 +24,7 @@ RSpec.describe Belated::Worker do
   end
 
   it 'does not fail if the object is garbage collected' do
-    @client.perform_belated(proc { raise Errno::ECONNREFUSED })
+    @client.perform_belated(proc { raise Errno::ECONNREFUSED }, max_retries: 0)
     @client.perform_belated(proc { 4 / 2 })
     sleep 0.01
     expect(@client.queue.length).to eq 0

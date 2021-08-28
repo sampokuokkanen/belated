@@ -7,14 +7,18 @@ module ActiveJob # :nodoc:
     # WIP
     class BelatedAdapter
       def instance
-        @instance ||= Belated::Client.new
+        @instance ||= Belated::Client.instance
+      rescue StandardError
+        @instance = Belated::Client.new
       end
 
       def enqueue(job) # :nodoc:
+        Rails.logger.info "Belated got job #{job}"
         instance.perform(job)
       end
 
       def enqueue_at(job, timestamp) # :nodoc:
+        Rails.logger.info "Belated got job #{job} to be performed at #{Time.at(timestamp)}"
         instance.perform_belated(job, at: timestamp)
       end
 

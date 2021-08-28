@@ -1,5 +1,5 @@
 class CreateUserJob < ApplicationJob
-  def perform
-    User.create!(name: "John Doe")
+  def perform(name:)
+    User.create!(name: name)
   end
 end

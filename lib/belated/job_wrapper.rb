@@ -13,7 +13,7 @@ class Belated
   class JobWrapper
     include Comparable
     include Logging
-    attr_accessor :retries, :max_retries, :id, :job, :at, :completed, :proc_klass
+    attr_accessor :retries, :max_retries, :id, :job, :at, :completed, :proc_klass, :error
 
     def initialize(job:, max_retries: 5, at: nil)
       self.retries = 0
@@ -37,8 +37,8 @@ class Belated
       when Interrupt, SignalException
         raise e
       else
-        retry_job
-        "Error while executing job, #{e.inspect}. Retry #{retries} of #{max_retries}"
+        retry_job(e)
+        "Error while executing job #{job.inspect}, #{e.inspect}. Retry #{retries} of #{max_retries}"
       end
     end
 
@@ -55,11 +55,14 @@ class Belated
       resp
     end
 
-    def retry_job
+    def retry_job(error)
       self.retries += 1
-      return if retries > max_retries
+      if retries > max_retries
+        self.error = error
+        return
+      end
 
-      self.at = Time.now + (retries.next**4)
+      self.at = (Time.now + (retries.next**4)).to_f
       log "Job #{id} failed, retrying at #{at}"
       Belated.job_list.push(self)
     end

@@ -30,10 +30,10 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    expect {
-      CreateUserJob.set(wait_until: Time.now + 0.1).perform_later
-      sleep 1
-    }.to change(User, :count).by(1)
+    u = CreateUserJob.set(wait_until: Time.now + 0.01).perform_later(name: 'John Doe')
+    expect(u.job_id).not_to be_nil
+    sleep 0.35
+    expect(User.find_by_name('John Doe')).to be_an_instance_of User
   end
 
   describe '#send_mail' do
@@ -44,10 +44,12 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     end
 
     context 'when send_mail' do
-      it { expect(mail.to.first).to eq('hoge.from@test.com') }
-      it { expect(mail.from.first).to eq('fuga.to@test.com') }
-      it { expect(mail.subject).to eq('ほげ商事の田中太郎です') }
-      it { expect(mail.body).to match(/本メールはほげ商事の田中太郎からのテストメールです。/) }
+      it 'actually sends the emails' do
+        expect(mail.to.first).to eq('hoge.from@test.com')
+        expect(mail.body).to match(/本メールはほげ商事の田中太郎からのテストメールです。/)
+        expect(mail.from.first).to eq('fuga.to@test.com')
+        expect(mail.subject).to eq('ほげ商事の田中太郎です')
+      end
     end
   end
 end

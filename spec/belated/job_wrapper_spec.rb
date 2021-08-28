@@ -14,7 +14,15 @@ RSpec.describe Belated::JobWrapper do
       expect {
         subject.perform
       }.to change { subject.retries }.from(0).to(1)
-      expect(Belated.job_list.future_jobs.empty?).to be_falsey
+    end
+
+    it 'adds the error to the error field if no more retries' do
+      subject.job = proc { raise 'error' }
+      subject.max_retries = 0
+      subject.perform
+      expect(subject.error.class).to eq RuntimeError
     end
   end
+
+  
 end
