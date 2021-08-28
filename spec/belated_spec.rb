@@ -3,6 +3,13 @@
 require 'dumdum'
 
 RSpec.describe Belated do
+  before do
+    @port = Belated.config.port
+    Belated.config.port = '1234'
+  end
+  after do
+    Belated.config.port = @port
+  end
   describe 'basics' do
     before do
       Belated.config.connect = false
@@ -54,9 +61,10 @@ RSpec.describe Belated do
             )
           )
         end
-        @worker.stop_workers
-        @worker.reload
-        expect(@worker.job_list.future_jobs.length).to eq 5
+        expect {
+          @worker.stop_workers
+          @worker.reload
+        }.to change(@worker.job_list.future_jobs.reject { |j| j.instance_of?(Proc) }, :length).by 0
       end
     end
   end

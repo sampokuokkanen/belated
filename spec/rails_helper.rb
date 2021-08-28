@@ -5,6 +5,7 @@ ENV['RAILS_ENV'] = 'test'
 require 'database_cleaner/active_record'
 
 DatabaseCleaner.strategy = :truncation
+Belated.config.rails = true
 require_relative '../dummy/config/environment'
 require 'rails'
 ENV['RAILS_ENV'] ||= 'test'

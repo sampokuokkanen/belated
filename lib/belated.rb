@@ -101,7 +101,7 @@ class Belated
         sleep Belated.heartbeat
         next
       end
-      if job.at <= Time.now
+      if job.at <= Time.now.to_f
         log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
         @@queue.push(job)
       end
@@ -179,5 +179,4 @@ class Belated
     @@queue
   end
 end
-
-require 'belated/rails' if defined?(::Rails::Engine)
+require 'active_job/queue_adapters/belated_adapter' if defined?(::Rails)

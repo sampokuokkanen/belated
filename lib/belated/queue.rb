@@ -25,7 +25,7 @@ class Belated
 
     def push(job)
       if job.is_a?(Symbol) || job.at.nil? ||
-         job.at <= Time.now.utc
+         job.at <= Time.now.to_f
         @queue.push(job)
       else
         @mutex.synchronize do
@@ -57,7 +57,7 @@ class Belated
 
       jobs = YAML.load(File.binread(FILE_NAME))
       jobs.each do |job|
-        if job.at && job.at > Time.now.utc
+        if job.at && job.at > Time.now.to_f
           future_jobs.push(job)
         else
           @queue.push(job)

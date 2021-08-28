@@ -78,7 +78,7 @@ class Belated
       start unless started?
       return unless proper_job?(job)
 
-      job_wrapper = wrap_job(job, at: at, max_retries: max_retries)
+      job_wrapper = wrap_job(job, at: at.to_f, max_retries: max_retries)
       bank.push(job_wrapper)
       @mutex.synchronize do
         proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass

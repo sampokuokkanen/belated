@@ -31,13 +31,7 @@ class Belated
 
     # rubocop:disable Lint/RescueException
     def perform
-      resp = if job.respond_to?(:call)
-               job.call
-             else
-               job.perform
-             end
-      self.completed = true
-      resp
+      execute
     rescue Exception => e
       case e.class
       when Interrupt, SignalException
@@ -47,7 +41,19 @@ class Belated
         "Error while executing job, #{e.inspect}. Retry #{retries} of #{max_retries}"
       end
     end
+
     # rubocop:enable Lint/RescueException
+    def execute
+      resp = if job.respond_to?(:call)
+               job.call
+             elsif job.respond_to?(:arguments)
+               job.perform(*job.arguments)
+             else
+               job.perform
+             end
+      self.completed = true
+      resp
+    end
 
     def retry_job
       self.retries += 1

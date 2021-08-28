@@ -1,4 +1,3 @@
-require 'byebug'
 require 'dumdum'
 require 'rails_helper'
 
@@ -28,8 +27,9 @@ RSpec.describe Belated::Client do
     end
 
     it 'performs the jobs once Belated is started' do
-      @client.perform_belated(proc { 2 / 1 })
-      expect(@client.bank.length).to eq(1)
+      expect {
+        @client.perform_belated(proc { 2 / 1 })
+      }.to change(@client.bank, :length).by(1)
       sleep 0.2
       expect(@client.bank.length).to eq(0)
     end
@@ -42,13 +42,13 @@ RSpec.describe Belated::Client do
 
     it 'has a date option' do
       now = Time.now
-      perform_at = now + 0.2
+      perform_at = now + 0.01
       expect {
         @client.perform(
           proc { User.create!(name: 'Diana!') },
           at: perform_at
         )
-        sleep 1
+        sleep 0.7
       }.to change { User.all.count }.by(1)
     end
 
