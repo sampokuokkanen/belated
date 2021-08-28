@@ -32,7 +32,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   it 'will create a user at a later date if given one' do
     u = CreateUserJob.set(wait_until: Time.now + 0.01).perform_later(name: 'John Doe')
     expect(u.job_id).not_to be_nil
-    sleep 0.35
+    sleep 0.39
     expect(User.find_by_name('John Doe')).to be_an_instance_of User
   end
 
