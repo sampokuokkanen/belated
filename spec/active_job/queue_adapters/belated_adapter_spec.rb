@@ -39,7 +39,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   describe '#send_mail' do
     subject(:mail) do
       TestMailer.send_mail.deliver_later
-      sleep 0.2
+      sleep 0.25
       ActionMailer::Base.deliveries.last
     end
 
