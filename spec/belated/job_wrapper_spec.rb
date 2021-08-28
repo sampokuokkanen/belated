@@ -23,6 +23,4 @@ RSpec.describe Belated::JobWrapper do
       expect(subject.error.class).to eq RuntimeError
     end
   end
-
-  
 end
