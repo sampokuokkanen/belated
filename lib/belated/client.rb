@@ -74,11 +74,11 @@ class Belated
     # @param at [Date] - The time at which the job should be executed.
     # @param max_retries [Integer] - Times the job should be retried if it fails.
     # @return [JobWrapper] - The job wrapper for the queue.
-    def perform(job, at: nil, max_retries: 5)
+    def perform(job, at: nil, max_retries: 5, active_job: false)
       start unless started?
       return unless proper_job?(job)
 
-      job_wrapper = wrap_job(job, at: at.to_f, max_retries: max_retries)
+      job_wrapper = wrap_job(job, at: at.to_f, max_retries: max_retries, active_job: active_job)
       bank.push(job_wrapper)
       @mutex.synchronize do
         proc_table[job_wrapper.object_id] = job_wrapper if job_wrapper.proc_klass
@@ -98,10 +98,10 @@ class Belated
       false
     end
 
-    def wrap_job(job, at:, max_retries:)
+    def wrap_job(job, at:, max_retries:, active_job:)
       return job if job.is_a?(JobWrapper)
 
-      JobWrapper.new(job: job, at: at, max_retries: max_retries)
+      JobWrapper.new(job: job, at: at, max_retries: max_retries, active_job: active_job)
     end
 
     def drb_connected?

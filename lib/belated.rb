@@ -65,6 +65,7 @@ class Belated
   end
 
   def trap_signals
+    pp 'trap'
     %w[INT TERM].each do |signal|
       Signal.trap(signal) do
         @worker_list.length.times do
@@ -95,12 +96,15 @@ class Belated
   end
 
   def enqueue_future_jobs
+    pp 'starting loop'
     loop do
+      pp "Enqueue! Heartbeat #{Belated.heartbeat}"
       job = @@queue.future_jobs.min
       if job.nil?
         sleep Belated.heartbeat
         next
       end
+      pp job
       if job.at <= Time.now.to_f
         log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
         @@queue.push(job)
@@ -156,19 +160,25 @@ class Belated
     }
   end
 
-  def self.kill_and_clear_queue!
-    @worker_list&.each do |worker|
-      Thread.kill(worker)
+  class << self
+    def find(job_id)
+      @@queue.future_jobs.find { |job| job.id == job_id }
     end
-    clear_queue!
-  end
 
-  def self.clear_queue!
-    @@queue.clear
-  end
+    def kill_and_clear_queue!
+      @worker_list&.each do |worker|
+        Thread.kill(worker)
+      end
+      clear_queue!
+    end
 
-  def self.fetch_job
-    @@queue.pop
+    def clear_queue!
+      @@queue.clear
+    end
+
+    def fetch_job
+      @@queue.pop
+    end
   end
 
   def job_list

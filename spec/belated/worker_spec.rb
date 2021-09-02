@@ -1,5 +1,5 @@
 RSpec.describe Belated::Worker do
-  before do
+  before :context do
     Belated.configure do |config|
       config.rails = false
       config.connect = true
@@ -10,7 +10,7 @@ RSpec.describe Belated::Worker do
     @client = Belated::Client.new
   end
 
-  after do
+  after :context do
     @worker.kill
     @client.turn_off
   end

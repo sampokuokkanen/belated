@@ -2,15 +2,16 @@ require 'rails_helper'
 require 'active_job/queue_adapters/belated_adapter'
 
 RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
-  before do
+  before :context do
     Belated.configure do |config|
       config.rails = true
-      config.workers = 1
+      config.workers = 2
+      config.connect = true
     end
     @worker = Thread.new { Belated.new }
   end
 
-  after do
+  after :context do
     @worker.kill
   end
 
@@ -19,7 +20,6 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'should be able to perform a job using perform_now' do
-    ActiveJob::Base.queue_adapter = :belated
     expect(TestJob.perform_now).to eq 'Test job'
   end
 
@@ -30,10 +30,23 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    u = CreateUserJob.set(wait_until: Time.now + 0.01).perform_later(name: 'John Doe')
+    u = CreateUserJob.set(wait_until: Time.now + 0.2).perform_later(name: 'John Doe')
+    sleep 0.05
+    job = Belated.find(u.job_id)
+    expect(job.id).to eq u.job_id
     expect(u.job_id).not_to be_nil
     sleep 0.39
     expect(User.find_by_name('John Doe')).to be_an_instance_of User
+  end
+
+  it 'can use the ActiveJob retry mechanism' do
+    fail_job = FailJob.set(wait_until: Time.now + 0.2).perform_later
+    sleep 0.3
+    job = Belated.find(fail_job.job_id)
+    expect(job.job.exception_executions).to eq({"[RuntimeError]" => 1})
+    sleep 4
+    job = Belated.find(fail_job.job_id)
+    expect(job.job.exception_executions).to eq({"[RuntimeError]" => 2})
   end
 
   describe '#send_mail' do

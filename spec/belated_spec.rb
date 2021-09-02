@@ -3,11 +3,11 @@
 require 'dumdum'
 
 RSpec.describe Belated do
-  before do
+  before :context do
     @port = Belated.config.port
     Belated.config.port = '1234'
   end
-  after do
+  after :context do
     Belated.config.port = @port
   end
   describe 'basics' do

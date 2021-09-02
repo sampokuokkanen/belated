@@ -15,18 +15,12 @@ module ActiveJob # :nodoc:
 
       def enqueue(job) # :nodoc:
         Rails.logger.info "Belated got job #{job}"
-        instance.perform(job)
+        instance.perform(job, active_job: true)
       end
 
       def enqueue_at(job, timestamp) # :nodoc:
         Rails.logger.info "Belated got job #{job} to be performed at #{Time.at(timestamp)}"
-        instance.perform_belated(job, at: timestamp)
-      end
-
-      class JobWrapper < Belated::JobWrapper # :nodoc:
-        def self.perform(job)
-          Base.execute job
-        end
+        instance.perform_belated(job, at: timestamp, active_job: true)
       end
     end
   end
