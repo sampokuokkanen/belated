@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'active_job/queue_adapters/belated_adapter'
 
 RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
-  before :context do
+  before :all do
     Belated.configure do |config|
       config.rails = true
       config.workers = 2
@@ -11,7 +11,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     @worker = Thread.new { Belated.new }
   end
 
-  after :context do
+  after :all do
     @worker.kill
   end
 
