@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.6.7)
+    belated (0.7.0)
       drb
       dry-configurable
       ruby2_keywords
