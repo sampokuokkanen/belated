@@ -15,6 +15,14 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     @worker.kill
   end
 
+  def find_job(job_id)
+    20.times do
+      sleep 0.01
+      job = Belated.find(job_id)
+      break job if job
+    end
+  end
+
   it 'inherits from Belated::Adapter' do
     expect(described_class).not_to be_nil
   end
@@ -30,22 +38,21 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    u = CreateUserJob.set(wait_until: Time.now + 0.2).perform_later(name: 'John Doe')
-    sleep 0.05
-    job = Belated.find(u.job_id)
+    u = CreateUserJob.set(wait_until: Time.now + 0.04).perform_later(name: 'John Doe')
+    job = find_job(u.job_id)
     expect(job.id).to eq u.job_id
     expect(u.job_id).not_to be_nil
-    sleep 0.39
+    sleep 0.29
     expect(User.find_by_name('John Doe')).to be_an_instance_of User
   end
 
   it 'can use the ActiveJob retry mechanism' do
-    fail_job = FailJob.set(wait_until: Time.now + 0.05).perform_later
-    sleep 0.07
-    job = Belated.find(fail_job.job_id)
+    fail_job = FailJob.set(wait_until: Time.now + 0.01).perform_later
+    sleep 0.02
+    job = find_job(fail_job.job_id)
     expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 1 })
-    sleep 0.07
-    job = Belated.find(fail_job.job_id)
+    sleep 0.06
+    job = find_job(fail_job.job_id)
     expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 2 })
   end
 
