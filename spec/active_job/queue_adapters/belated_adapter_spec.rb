@@ -40,7 +40,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    u = CreateUserJob.set(wait_until: Time.now + 0.09).perform_later(name: 'John Doe')
+    u = CreateUserJob.set(wait_until: Time.now + 0.1).perform_later(name: 'John Doe')
     job = find_job(u.job_id)
     expect(job.id).to eq u.job_id
     expect(u.job_id).not_to be_nil
