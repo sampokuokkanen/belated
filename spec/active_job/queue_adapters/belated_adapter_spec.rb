@@ -21,7 +21,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
       job = Belated.find(job_id)
       break(job) if job
 
-      raise "No job found 😢" if i == 30
+      raise 'No job found 😢' if i == 30
     end
   end
 
