@@ -53,9 +53,9 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     sleep 0.01
     job = find_job(fail_job.job_id)
     expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 1 })
-    sleep 0.06
+    sleep 0.04
     job = find_job(fail_job.job_id)
-    expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 2 })
+    expect(job.job.exception_executions['[RuntimeError]']).to be_between(2, 3)
   end
 
   describe '#send_mail' do
