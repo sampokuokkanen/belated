@@ -16,10 +16,12 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   def find_job(job_id)
-    20.times do
+    31.times do |i|
       sleep 0.01
       job = Belated.find(job_id)
-      break job if job
+      break(job) if job
+
+      raise "No job found 😢" if i == 30
     end
   end
 
@@ -38,7 +40,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    u = CreateUserJob.set(wait_until: Time.now + 0.04).perform_later(name: 'John Doe')
+    u = CreateUserJob.set(wait_until: Time.now + 0.09).perform_later(name: 'John Doe')
     job = find_job(u.job_id)
     expect(job.id).to eq u.job_id
     expect(u.job_id).not_to be_nil
@@ -47,8 +49,8 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'can use the ActiveJob retry mechanism' do
-    fail_job = FailJob.set(wait_until: Time.now + 0.01).perform_later
-    sleep 0.02
+    fail_job = FailJob.set(wait_until: Time.now + 0.001).perform_later
+    sleep 0.01
     job = find_job(fail_job.job_id)
     expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 1 })
     sleep 0.06
