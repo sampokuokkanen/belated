@@ -96,15 +96,12 @@ class Belated
   end
 
   def enqueue_future_jobs
-    pp 'starting loop'
     loop do
-      pp "Enqueue! Heartbeat #{Belated.heartbeat}"
       job = @@queue.future_jobs.min
       if job.nil?
         sleep Belated.heartbeat
         next
       end
-      pp job
       if job.at <= Time.now.to_f
         log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
         @@queue.push(job)

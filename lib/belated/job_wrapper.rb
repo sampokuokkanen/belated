@@ -32,7 +32,9 @@ class Belated
 
     # rubocop:disable Lint/RescueException
     def perform
-      execute
+      resp = execute
+      self.completed = true
+      resp
     rescue Exception => e
       case e.class
       when Interrupt, SignalException
@@ -45,17 +47,15 @@ class Belated
 
     # rubocop:enable Lint/RescueException
     def execute
-      resp = if active_job
-               ActiveJob::Base.execute job.serialize
-             elsif job.respond_to?(:call)
-               job.call
-             elsif job.respond_to?(:arguments)
-               job.perform(*job.arguments)
-             else
-               job.perform
-             end
-      self.completed = true
-      resp
+      if active_job
+        ActiveJob::Base.execute job.serialize
+      elsif job.respond_to?(:call)
+        job.call
+      elsif job.respond_to?(:arguments)
+        job.perform(*job.arguments)
+      else
+        job.perform
+      end
     end
 
     def retry_job(error)
@@ -65,7 +65,8 @@ class Belated
         return
       end
 
-      self.at = (Time.now + (retries.next ** 1)).to_f
+      seconds_to_retry = $TESTING ? 0.05 : retries.next**4
+      self.at = (Time.now + seconds_to_retry).to_f
       log "Job #{id} failed, retrying at #{at}"
       Belated.job_list.push(self)
     end

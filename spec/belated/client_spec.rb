@@ -48,7 +48,7 @@ RSpec.describe Belated::Client do
           proc { User.create!(name: 'Diana!') },
           at: perform_at
         )
-        sleep 0.7
+        sleep 0.1
       }.to change { User.all.count }.by(1)
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Belated::Client do
           @client.perform(proc { 2 / 1 })
         end
       }.to change { @client.proc_table.length }.by(26)
-      sleep 0.3
+      sleep 0.33
       expect(@client.proc_table.length).to be_between(0, 3)
     end
 

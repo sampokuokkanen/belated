@@ -1,5 +1,5 @@
 class FailJob < ApplicationJob
-  retry_on RuntimeError, attempts: 5
+  retry_on RuntimeError, attempts: 5, wait: 0.2
 
   def perform
     @retries ||= -1

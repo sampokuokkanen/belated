@@ -40,13 +40,13 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'can use the ActiveJob retry mechanism' do
-    fail_job = FailJob.set(wait_until: Time.now + 0.2).perform_later
-    sleep 0.3
+    fail_job = FailJob.set(wait_until: Time.now + 0.05).perform_later
+    sleep 0.07
     job = Belated.find(fail_job.job_id)
-    expect(job.job.exception_executions).to eq({"[RuntimeError]" => 1})
-    sleep 4
+    expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 1 })
+    sleep 0.07
     job = Belated.find(fail_job.job_id)
-    expect(job.job.exception_executions).to eq({"[RuntimeError]" => 2})
+    expect(job.job.exception_executions).to eq({ '[RuntimeError]' => 2 })
   end
 
   describe '#send_mail' do
