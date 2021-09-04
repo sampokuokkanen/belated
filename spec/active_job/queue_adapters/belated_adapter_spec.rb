@@ -53,7 +53,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     sleep 0.01
     job = find_job(fail_job.job_id)
     expect(job.job.exception_executions['[RuntimeError]']).to be_between(1, 2)
-    sleep 0.06
+    sleep 0.07
     job = find_job(fail_job.job_id)
     expect(job.job.exception_executions['[RuntimeError]']).to be_between(2, 4)
   end
