@@ -40,7 +40,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
   end
 
   it 'will create a user at a later date if given one' do
-    u = CreateUserJob.set(wait_until: Time.now + 0.121).perform_later(name: 'John Doe')
+    u = CreateUserJob.set(wait_until: Time.now + 0.13).perform_later(name: 'John Doe')
     job = find_job(u.job_id)
     expect(job.id).to eq u.job_id
     expect(u.job_id).not_to be_nil
@@ -55,7 +55,7 @@ RSpec.describe ActiveJob::QueueAdapters::BelatedAdapter do
     expect(job.job.exception_executions['[RuntimeError]']).to be_between(1, 2)
     sleep 0.07
     job = find_job(fail_job.job_id)
-    expect(job.job.exception_executions['[RuntimeError]']).to be_between(2, 4)
+    expect(job.job.exception_executions['[RuntimeError]']).to be_between(2, 5)
   end
 
   describe '#send_mail' do
