@@ -17,7 +17,6 @@ Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. No
 TODO LIST:
 
 - Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? Would need to be configurable if you don't have something installed.
-- Maybe support ActiveJob?
 - Have a web UI.
 - Have a job history
 - Do some performance testing.
@@ -48,7 +47,15 @@ Start up Belated!
 
     $ belated
 
-Then, in another program, connect to Belated and give it a job to do.
+If you're using Rails, just set Belated to be the ActiveJob adapter like below:
+
+```ruby
+config.active_job.adapter = :belated
+```
+
+And you're good to go!
+
+If not, in your non-ActiveJob using program, connect to Belated and give it a job to do.
 Sample below:
 
 ```ruby

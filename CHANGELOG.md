@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.7] - 2021-09-04
+- ActiveJob support! Retries, exception rescuing should work as expected. 
+- Second Moderna jab took me out for a while... sorry for the long wait. 
 ## [0.6.7] - 2021-08-25
 
 - A bug fix for bad jobs bringing down client side. 
