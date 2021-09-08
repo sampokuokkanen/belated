@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.8] - 2021-09-08
+- Using PStore for future jobs backup and job history. Job history is rotated daily, future jobs cannot at the moment. 
+- PStore has ultrasafe mode, should test whether that makes things very slow. If not, might be worth using it for the peace of mind. Or at least have it as an option. 
+- ActiveJob support is a bit more natural now code-wise. 
+
 ## [0.7] - 2021-09-04
 - ActiveJob support! Retries, exception rescuing should work as expected. 
 - Second Moderna jab took me out for a while... sorry for the long wait. 

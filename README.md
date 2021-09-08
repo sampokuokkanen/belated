@@ -2,11 +2,9 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/sampokuokkanen/belated/badge)](https://www.codefactor.io/repository/github/sampokuokkanen/belated) [![Gem Version](https://badge.fury.io/rb/belated.svg)](https://badge.fury.io/rb/belated)
 
-This is Belated, a new Ruby backend job library! It supports running procs, lambdas and classes in the background. To deal with restarts, it uses YAML to load the queue into a file, which it then calls at startup to find the previous jobs. There is no way in Ruby to save procs or lambdas to a file, so they are discarded when the process restarts.
+This is Belated, a new Ruby backend job library! It supports running procs, lambdas and classes in the background. To deal with restarts, it uses YAML for the current jobs in the queue waiting to be processed and PStore for the future jobs to load the queues into a file, which it then calls at startup to find the previous jobs. There is no way in Ruby to save procs or lambdas to a file, so they are discarded when the process restarts.
 
-Belated uses the Ruby Queue class, so it's First In, First Out (FIFO). 
-
-Note that Belated used to be called HardWorker. That name was already in use in Sidekiq documentation and a bit too generic anyway. 
+Belated uses the Ruby Queue class, so it's First In, First Out (FIFO), unless of course you want to run the job in the future. In that case the order is decided by the time the job is scheduled to be executed. 
 
 It uses dRuby to do the communication! Which is absolute great. No need for Redis or PostgreSQL, just Ruby standard libraries.
 
@@ -16,14 +14,14 @@ Can be used if you're on a normal instance such as EC2 or Digital Ocean drop. No
 
 TODO LIST:
 
-- Use GDBM for queue storage? That way could maybe get rid of YAML dumping and make things a bit safer. Not ordered though, so maybe keep a list of the jobs as YAML and update it sometimes? Just as backup. Or RocksDB? Would need to be configurable if you don't have something installed.
-- Have a web UI.
-- Have a job history
-- Do some performance testing.
+- Have a web UI with job history.
 - Deploy a Rails app to production that is using Belated
   and mention it in the readme. (Capistrano support?)
-  ([Wasurechatta](https://wasurechatta.com/))
-- Add a section telling people to use Sidekiq if they can
+  ([Wasurechatta](https://wasurechatta.com/) deployed, still need to setup Capistrano)
+
+# Why not Sidekiq? 
+
+If you can, definitely use Sidekiq!!! Belated is supposed to be used if you can't get anything else to work. Like if you want to use SQLite in a Rails app and don't want to have Redis running. Or maybe you just want to run procs in the background? 
 
 ## Installation
 
