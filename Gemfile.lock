@@ -4,6 +4,7 @@ PATH
     belated (0.7.0)
       drb
       dry-configurable
+      pstore
       ruby2_keywords
       sorted_set
 
@@ -104,13 +105,10 @@ GEM
     nokogiri (1.12.3)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.12.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.12.3-x86_64-linux)
-      racc (~> 1.4)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
+    pstore (0.1.1)
     racc (1.5.2)
     rack (2.2.3)
     rack-test (1.1.0)

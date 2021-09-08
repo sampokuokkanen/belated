@@ -10,7 +10,7 @@ RSpec.describe Belated do
     @worker = Thread.new { Belated.new }
     @client = Belated::Client.new
   end
-  
+
   after :all do
     @client.turn_off
     @worker.kill

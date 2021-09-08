@@ -51,7 +51,7 @@ class Belated
     connect!
     banner_and_info
     trap_signals
-    enqueue_future_jobs
+    @@queue.enqueue_future_jobs
   end
   alias initialize start
 
@@ -93,23 +93,6 @@ class Belated
 
   def rails?
     Belated.config.rails
-  end
-
-  def enqueue_future_jobs
-    loop do
-      job = @@queue.future_jobs.min
-      if job.nil?
-        sleep Belated.heartbeat
-        next
-      end
-      if job.at <= Time.now.to_f
-        log "Deleting #{@@queue.future_jobs.delete(job)} from future jobs"
-        @@queue.push(job)
-      end
-    rescue DRb::DRbConnError
-      error 'DRb connection error!!!!!!'
-      log stats
-    end
   end
 
   def reload

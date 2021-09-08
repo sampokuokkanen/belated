@@ -2,19 +2,19 @@ require 'dumdum'
 require 'rails_helper'
 
 RSpec.describe Belated::Client do
-  before(:all) do
+  before :all do
     Belated.configure do |config|
       config.rails = true
-      config.workers = 1
+      config.workers = 2
       config.connect = true
     end
     @worker = Thread.new { Belated.new }
     @client = Belated::Client.new
   end
 
-  after(:all) do
-    @client.turn_off
+  after :all do
     @worker.kill
+    @client.turn_off
   end
 
   describe 'client can recover from not having connection' do
@@ -48,7 +48,7 @@ RSpec.describe Belated::Client do
           proc { User.create!(name: 'Diana!') },
           at: perform_at
         )
-        sleep 0.32
+        sleep 0.322
       }.to change { User.all.count }.by(1)
     end
 

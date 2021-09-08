@@ -101,7 +101,12 @@ class Belated
     def wrap_job(job, at:, max_retries:, active_job:)
       return job if job.is_a?(JobWrapper)
 
-      JobWrapper.new(job: job, at: at, max_retries: max_retries, active_job: active_job)
+      wrapper = if active_job
+                  ActiveJob::QueueAdapters::BelatedAdapter::JobWrapper
+                else
+                  JobWrapper
+                end
+      wrapper.new(job: job, at: at, max_retries: max_retries, active_job: active_job)
     end
 
     def drb_connected?
