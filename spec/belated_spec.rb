@@ -119,5 +119,5 @@ RSpec.describe Belated do
       Belated.delete(job.id)
       expect(Belated.find(job.id)).to be_nil
     end
-  end 
+  end
 end
