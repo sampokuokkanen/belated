@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.8.1] - 2021-09-09
+- Now you can delete jobs from the future jobs queue. This is useful if you want to delete a job that is scheduled for a future date.
+
 ## [0.8] - 2021-09-08
 - Using PStore for future jobs backup and job history. Job history is rotated daily, future jobs cannot at the moment. 
 - PStore has ultrasafe mode, should test whether that makes things very slow. If not, might be worth using it for the peace of mind. Or at least have it as an option. 

@@ -145,6 +145,11 @@ class Belated
       @@queue.future_jobs.find { |job| job.id == job_id }
     end
 
+    def delete(job_id)
+      job = find(job_id)
+      @@queue.future_jobs.delete(job)
+    end
+
     def kill_and_clear_queue!
       @worker_list&.each do |worker|
         Thread.kill(worker)

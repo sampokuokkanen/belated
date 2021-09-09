@@ -57,7 +57,7 @@ RSpec.describe Belated do
           @worker.job_list.push(
             Belated::JobWrapper.new(
               job: DumDum.new(sleep: 1),
-              at: Time.now + 500
+              at: (Time.now + 500).to_f
             )
           )
         end
@@ -110,5 +110,14 @@ RSpec.describe Belated do
       expect(@worker.job_list.empty?).to be_truthy
       Belated.kill_and_clear_queue!
     end
-  end
+
+    it 'is possible to find and delete a job' do
+      job = Belated::JobWrapper.new(job: proc { puts 'hello' }, at: (Time.now + 10).to_f)
+      @worker.job_list.push(job)
+      sleep 0.01
+      expect(Belated.find(job.id)).to eq job
+      Belated.delete(job.id)
+      expect(Belated.find(job.id)).to be_nil
+    end
+  end 
 end

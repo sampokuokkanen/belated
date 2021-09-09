@@ -74,8 +74,17 @@ client.perform_belated(DumDum.new, at: Time.now + 5 * 60)
 client.perform_belated(DumDum.new, max_retries: 3) # default 5
 ```
 
-Belated runs on localhost, port 8788. 
-Going to make that an option in the future.
+You can also fetch jobs from the future jobs queue:
+
+```ruby
+job = client.perform_belated(proc { 0 / 0 }, at: Time.now + 5 * 60)
+Belated.find job.id # Find the job if it's in the future queue
+# Oh no, that job looks a bit weird!
+# Let's delete it:
+Belated.delete job.id
+```
+
+Belated runs on localhost, port 8788 by default, but the port is configurable, see below. 
 
 ## Rails
 
