@@ -78,15 +78,14 @@ You can also fetch jobs from the future jobs queue:
 
 ```ruby
 job = client.perform_belated(proc { 0 / 0 }, at: Time.now + 5 * 60)
-client.perform_belated(
-  Belated.find job.id # Find the job if it's in the future queue
-)
+job = Belated.find job.id # Find the job if it's in the future queue
 # Oh no, that job looks a bit weird!
 # Let's delete it:
 client.perform_belated(
   Belated.delete job.id
 )
 # Yeah... currently you have to send the command through the client like this as a job. :/
+# Maybe the client should handle the deletion?
 ```
 
 Belated runs on localhost, port 8788 by default, but the port is configurable, see below. 

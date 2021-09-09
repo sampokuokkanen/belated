@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.8.2] - 2021-09-09
+- Fixed a bug where the adapter was not defined when loading jobs from the PStore file. 
+
 ## [0.8.1] - 2021-09-09
 - Now you can delete jobs from the future jobs queue. This is useful if you want to delete a job that is scheduled for a future date.
 
