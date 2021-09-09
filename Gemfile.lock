@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.8.1)
+    belated (0.8.2)
       drb
       dry-configurable
       pstore
