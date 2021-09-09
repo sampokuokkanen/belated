@@ -89,6 +89,7 @@ class Belated
     require File.expand_path("#{Belated.config.rails_path}/config/environment.rb")
     require 'rails/all'
     require 'belated/rails'
+    require 'active_job/queue_adapters/belated_adapter'
   end
 
   def rails?
@@ -142,12 +143,12 @@ class Belated
 
   class << self
     def find(job_id)
-      @@queue.future_jobs.find { |job| job.id == job_id }
+      @@queue.find(job_id)
     end
 
     def delete(job_id)
       job = find(job_id)
-      @@queue.future_jobs.delete(job)
+      @@queue.delete_job(job)
     end
 
     def kill_and_clear_queue!

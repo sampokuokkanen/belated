@@ -99,10 +99,13 @@ class Belated
       true
     end
 
-    private
-
-    def proc_or_shutdown?(job)
-      job.is_a?(Symbol) || job.job.instance_of?(Proc)
+    def find(job_id)
+      job = nil
+      future_jobs_db.transaction(true) do
+        job = future_jobs_db[job_id]
+      end
+      job = future_jobs.find { |j| j.id == job_id } if job.nil?
+      job
     end
 
     def delete_job(job)
@@ -110,6 +113,12 @@ class Belated
       future_jobs_db.transaction do
         future_jobs_db.delete(job.id)
       end
+    end
+
+    private
+
+    def proc_or_shutdown?(job)
+      job.is_a?(Symbol) || job.job.instance_of?(Proc)
     end
 
     def insert_into_future_jobs_db(job)
