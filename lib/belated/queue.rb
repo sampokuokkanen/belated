@@ -21,7 +21,7 @@ class Belated
       @queue = queue
       @mutex = Mutex.new
       self.future_jobs = future_jobs
-      self.future_jobs_db = PStore.new('future_jobs.pstore', true) # pass true for thread safety
+      self.future_jobs_db = PStore.new("future_jobs_#{Belated.environment}.pstore", true) # pass true for thread safety
     end
 
     def enqueue_future_jobs

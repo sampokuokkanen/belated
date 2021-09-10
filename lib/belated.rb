@@ -22,7 +22,6 @@ class Belated
   extend Dry::Configurable
   include Logging
   include Singleton unless $TESTING
-  @@queue = Belated::Queue.new
 
   setting :rails, true
   setting :rails_path, '.'
@@ -36,6 +35,7 @@ class Belated
   setting :heartbeat, 1, reader: true
   setting :client_heartbeat, 5, reader: true
   URI = "druby://#{Belated.host}:#{Belated.port}"
+  @@queue = Belated::Queue.new
 
   # Since it's running as a singleton, we need something to start it up.
   # Aliased for testing purposes.

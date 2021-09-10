@@ -21,8 +21,8 @@ RSpec.configure do |config|
   end
   config.after(:each) do
     Belated.kill_and_clear_queue!
-    File.delete "history-#{Time.now.strftime("%F")}.pstore" if File.exist? "history-#{Time.now.strftime("%F")}.pstore"
-    File.delete 'future_jobs.pstore' if File.exist? 'future_jobs.pstore'
+    File.delete "history_#{Belated.environment}-#{Time.now.strftime("%F")}.pstore" if File.exist? "history-#{Time.now.strftime("%F")}.pstore"
+    File.delete "future_jobs_#{Belated.environment}.pstore" if File.exist? "future_jobs_#{Belated.environment}.pstore"
   end
 
   # config.around(:each) do |example|

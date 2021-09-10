@@ -37,7 +37,7 @@ RSpec.describe Belated::Worker do
     expect(job.completed).to be_falsey
     sleep 0.04
     today = Time.now.strftime('%F')
-    store = PStore.new("history-#{today}.pstore", true)
+    store = PStore.new("history_#{Belated.environment}-#{today}.pstore", true)
     stored_job = nil
     store.transaction(true) do
       stored_job = store[job.id]

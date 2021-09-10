@@ -42,7 +42,7 @@ class Belated
       today = Time.now.strftime('%F')
       return @store if @store&.path&.include?(today)
 
-      @store = PStore.new("history-#{today}.pstore", true)
+      @store = PStore.new("history_#{Belated.environment}-#{today}.pstore", true)
     end
   end
 end

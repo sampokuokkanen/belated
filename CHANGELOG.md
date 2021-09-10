@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.8.3] - 2021-09-10
+- Add environment to the names of the pstore files. This way you won't get your development, staging, and production jobs mixed up. (I was getting my test and dev jobs mixed up)
+
 ## [0.8.2] - 2021-09-09
 - Fixed a bug where the adapter was not defined when loading jobs from the PStore file. 
 
