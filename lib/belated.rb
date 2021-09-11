@@ -88,7 +88,6 @@ class Belated
     ENV['RAILS_ENV'] ||= Belated.config.environment
     require File.expand_path("#{Belated.config.rails_path}/config/environment.rb")
     require 'rails/all'
-    require 'belated/rails'
     require 'active_job/queue_adapters/belated_adapter'
   end
 
@@ -175,4 +174,7 @@ class Belated
     @@queue
   end
 end
-require 'active_job/queue_adapters/belated_adapter' if defined?(::Rails)
+if defined?(::Rails)
+  require 'active_job/queue_adapters/belated_adapter'
+  require 'belated/engine'
+end

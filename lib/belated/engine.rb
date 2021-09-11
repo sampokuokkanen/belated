@@ -1,5 +1,5 @@
 class Belated
-  class Rails < ::Rails::Engine
+  class Engine < ::Rails::Engine
     isolate_namespace Belated
   end
 end
