@@ -1,7 +1,6 @@
 class Belated
   # Controller in charge of admin side of Belated.
-  # TODO: Rename it
-  class BelatedController < ::ActionController::Base
+  class AdminController < ::ActionController::Base
     def index
       return unless request.post?
 
