@@ -6,5 +6,7 @@ class Belated
 
       @belated = Belated.find params[:job_id]
     end
+
+    def future_jobs; end
   end
 end

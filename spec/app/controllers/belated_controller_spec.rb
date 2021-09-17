@@ -26,9 +26,15 @@ RSpec.describe Belated::AdminController, type: :controller do
     expect(response.body).to include 'Belated'
   end
 
+  it 'shows all future jobs on future_jobs page' do
+    @job = @client.perform_belated(DumDum.new, at: Time.now + 400)
+    sleep 0.2
+    get 'future_jobs'
+  end
+
   it 'accepts post requests' do
     job = @client.perform_belated(DumDum.new, at: Time.now + 400)
-    sleep 0.1
+    sleep 0.2
     post 'index', params: { job_id: job.id }
     expect(response.status).to eq 200
     expect(response.body).to include 'Belated'

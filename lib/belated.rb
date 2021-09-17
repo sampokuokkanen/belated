@@ -6,6 +6,7 @@ require_relative 'belated/worker'
 require 'belated/client'
 require 'belated/job_wrapper'
 require 'belated/queue'
+require 'ruby2_keywords'
 require 'drb'
 require 'dry-configurable'
 require 'logger'
@@ -65,7 +66,6 @@ class Belated
   end
 
   def trap_signals
-    pp 'trap'
     %w[INT TERM].each do |signal|
       Signal.trap(signal) do
         @worker_list.length.times do
