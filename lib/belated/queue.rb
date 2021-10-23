@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'belated/job'
 require 'belated/logging'
 require 'belated/job_wrapper'
 require 'sorted_set'

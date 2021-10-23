@@ -25,16 +25,21 @@ class Belated
   include Singleton unless $TESTING
 
   setting :rails, true
-  setting :rails_path, '.'
-  setting :workers, 1
-  setting :connect, true
-  setting :environment, 'development', reader: true
-  setting :logger, Logger.new($stdout), reader: true
+  setting :rails_path, default: '.'
+  setting :workers, default: 1
+  setting :connect, default: true
+  setting :environment, default: 'development', reader: true
+  setting :logger, default: Logger.new($stdout), reader: true
   setting :log_level, :info, reader: true
-  setting :host, 'localhost', reader: true
-  setting :port, '8788', reader: true
-  setting :heartbeat, 1, reader: true
-  setting :client_heartbeat, 5, reader: true
+  setting :host, default: 'localhost', reader: true
+  setting :port, default: '8788', reader: true
+  setting :heartbeat, default: 1, reader: true
+  setting :client_heartbeat, default: 5, reader: true
+  setting :basic_auth, reader: true do
+    setting :name
+    setting :password
+  end
+
   URI = "druby://#{Belated.host}:#{Belated.port}"
   @@queue = Belated::Queue.new
 
@@ -155,6 +160,10 @@ class Belated
         Thread.kill(worker)
       end
       clear_queue!
+    end
+
+    def all_future_jobs
+      @@queue.future_jobs
     end
 
     def clear_queue!

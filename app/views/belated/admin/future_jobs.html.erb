@@ -1,0 +1,20 @@
+<table class="table jobs">
+  <thead>
+    <th>
+      Job Name
+    </th>
+    <th>
+      Job Time
+    </th>
+  </thead>
+  <%= @belateds.each do |job| %>
+  <tr>
+    <td>
+      <%= job.job.inspect %>
+    </td>
+    <td>
+      <%= job.at %>
+    </td>
+  </tr>
+  <% end %>
+</table>
