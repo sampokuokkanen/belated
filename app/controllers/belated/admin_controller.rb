@@ -1,7 +1,6 @@
 class Belated
   # Controller in charge of admin side of Belated.
   class AdminController < ::ActionController::Base
-
     if (name = Belated.basic_auth.name) && (pass = Belated.basic_auth.password)
       http_basic_authenticate_with name: name, password: pass
     end
