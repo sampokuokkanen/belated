@@ -24,13 +24,13 @@ class Belated
   include Logging
   include Singleton unless $TESTING
 
-  setting :rails, true
+  setting :rails, default: true
   setting :rails_path, default: '.'
   setting :workers, default: 1
   setting :connect, default: true
-  setting :environment, default: 'development', reader: true
+  setting :env, default: 'production', reader: true
   setting :logger, default: Logger.new($stdout), reader: true
-  setting :log_level, :info, reader: true
+  setting :log_level, default: :info, reader: true
   setting :host, default: 'localhost', reader: true
   setting :port, default: '8788', reader: true
   setting :heartbeat, default: 1, reader: true
@@ -90,7 +90,7 @@ class Belated
   def boot_app
     return unless rails?
 
-    ENV['RAILS_ENV'] ||= Belated.config.environment
+    ENV['RAILS_ENV'] ||= Belated.env
     require File.expand_path("#{Belated.config.rails_path}/config/environment.rb")
     require 'rails/all'
     require 'active_job/queue_adapters/belated_adapter'
@@ -134,7 +134,7 @@ class Belated
 
   def banner_and_info
     log banner
-    log "Currently running Belated version #{Belated::VERSION} in #{Belated.config.environment}"
+    log "Currently running Belated version #{Belated::VERSION} in #{Belated.env}"
     log %(Belated running #{@worker_list&.length.to_i} workers on #{URI}...)
   end
 

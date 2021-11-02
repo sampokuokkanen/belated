@@ -11,7 +11,8 @@
 .rspec_status
 .byebug_history
 /dummy/tmp/cache/
-/dummy/log/
-/dummy/log/test.log
+/dummy/log/*.log
+/dummy/db
 belated_dump
 stackprof*
+history_*
