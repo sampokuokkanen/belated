@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.9.0] - 2021-11-03 
+- Fix env setting bug. If you set env, it was not working... now it should work. 
+- Add rudimentary admin panel. You can see future jobs from there. 
 ## [0.8.3] - 2021-09-10
 - Add environment to the names of the pstore files. This way you won't get your development, staging, and production jobs mixed up. (I was getting my test and dev jobs mixed up)
 
