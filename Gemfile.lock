@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    belated (0.8.3)
+    belated (0.9.0)
       drb
       dry-configurable
       pstore
@@ -188,7 +188,7 @@ GEM
       rubocop (~> 1.19)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
-    set (1.0.1)
+    set (1.0.2)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
