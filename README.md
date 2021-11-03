@@ -123,16 +123,30 @@ client.perform_belated(job, Time.now + 1.month)
 
 The client also holds references to the jobs that are instances of `Proc` that have been pushed so that they are not collected by GC. This is because procs are passed by reference, and the client needs to keep them alive. They are removed from the list when the job is done.
 
+There is also a rudimentary admin panel: 
+1. Mount the engine routes
+```ruby
+# routes.rb
+mount Belated::Engine => '/belated'
+```
+
+Then access it at `/belated/` for job search based on id or see future jobs at `/belated/future_jobs`.
+Warning: Very rudimentary.  
+
 # Settings
 
 Configuring Belated:
 
 ```ruby
 Belated.configure do |config|
+  config.env = 'production' # Defaults to production
   config.rails = false # default is true
   config.rails_path = # './dummy' default is '.'
   config.connect = false # Connect to dRuby, default is true, useful for testing only
   config.workers = 2 # default is 1
+  config.basic_auth.user = 'user' # default is Belated
+  config.basic_auth.password = 'password' # default is Belated123
+  # Set nil for both if you don't want basic auth
 end
 ```
 

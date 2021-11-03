@@ -36,8 +36,8 @@ class Belated
   setting :heartbeat, default: 1, reader: true
   setting :client_heartbeat, default: 5, reader: true
   setting :basic_auth, reader: true do
-    setting :name
-    setting :password
+    setting :name, default: 'Belated'
+    setting :password, default: 'Belated123'
   end
 
   URI = "druby://#{Belated.host}:#{Belated.port}"
